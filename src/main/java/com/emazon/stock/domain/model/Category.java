@@ -1,6 +1,6 @@
 package com.emazon.stock.domain.model;
 
-import com.emazon.stock.domain.exception.EmptyFieldException;
+import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.utils.DomainConstants;
 
 import java.util.List;
@@ -16,7 +16,6 @@ public class Category {
     private List<Product> products;
 
     // Constructors
-
 
     public Category(Long id, String name, String description, List<Product> products) {
         if(name.trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.NAME.toString());

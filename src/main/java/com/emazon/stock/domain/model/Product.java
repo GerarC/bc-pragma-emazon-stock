@@ -1,8 +1,8 @@
 package com.emazon.stock.domain.model;
 
-import com.emazon.stock.domain.exception.EmptyFieldException;
-import com.emazon.stock.domain.exception.NegativeNotAllowedException;
-import com.emazon.stock.domain.exception.OutOfBoundsException;
+import com.emazon.stock.domain.exceptions.EmptyFieldException;
+import com.emazon.stock.domain.exceptions.NegativeNotAllowedException;
+import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.utils.DomainConstants;
 
 import java.math.BigDecimal;
@@ -21,14 +21,15 @@ public class Product {
 
     // Constructors
 
-
     public Product(Long id, String name, String description, BigDecimal price, Long quantity, List<Category> categories, Brand brand) {
-        if(name.trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
-        if(description.trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.DESCRIPTION.toString());
-        if(price.compareTo(BigDecimal.ZERO) < 0) throw new NegativeNotAllowedException(DomainConstants.Field.PRICE.toString());
-        if(quantity < 0) throw new NegativeNotAllowedException(DomainConstants.Field.QUANTITY.toString());
-        if(categories.isEmpty()) throw new EmptyFieldException(DomainConstants.Field.CATEGORIES.toString());
-        if(categories.size() > 3) throw new OutOfBoundsException(DomainConstants.Field.CATEGORIES.toString());
+        if (name.trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
+        if (description.trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.DESCRIPTION.toString());
+        if (price.compareTo(BigDecimal.ZERO) < 0)
+            throw new NegativeNotAllowedException(DomainConstants.Field.PRICE.toString());
+        if (quantity < 0) throw new NegativeNotAllowedException(DomainConstants.Field.QUANTITY.toString());
+        if (categories.isEmpty()) throw new EmptyFieldException(DomainConstants.Field.CATEGORIES.toString());
+        if (categories.size() > DomainConstants.FIELD_CATEGORIES_LIMIT)
+            throw new OutOfBoundsException(DomainConstants.Field.CATEGORIES.toString());
 
 
         this.id = id;

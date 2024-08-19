@@ -1,0 +1,18 @@
+spring:
+    datasource:
+        url: ${SPRING_STOCK_DATASOURCE_URL:jdbc:mysql://localhost:3306/stock}
+        username: ${SPRING_STOCK_DATASOURCE_USERNAME:root}
+        password: ${SPRING_STOCK_DATASOURCE_PASSWORD:password}
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+
+logging:
+    level:
+        web: trace
+        org:
+            springframework:
+                web: trace
