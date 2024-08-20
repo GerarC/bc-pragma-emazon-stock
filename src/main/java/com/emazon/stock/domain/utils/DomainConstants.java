@@ -27,7 +27,14 @@ public class DomainConstants {
     public static final String FIELD_BRAND_NULL_MESSAGE = "Field 'brand' cannot be null";
     public static final String NOT_FOUND_MESSAGE = "not found";
 
-    // Out of bound
+    // bound limits
+
     public static final Integer FIELD_CATEGORIES_LIMIT = 3;
+    public static final Integer CATEGORY_NAME_LENGTH_LIMIT = 50;
+    public static final Integer CATEGORY_DESCRIPTION_LENGTH_LIMIT = 90;
+
+    // Out of bounds
+    public static final String CHARS_LIMIT_REACHED_MESSAGE = "chars limit reached";
+    public static final String CATEGORIES_LIMIT_REACHED_MESSAGE = "categories limit reached";
 
 }

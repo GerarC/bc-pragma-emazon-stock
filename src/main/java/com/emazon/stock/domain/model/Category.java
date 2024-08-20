@@ -18,8 +18,6 @@ public class Category {
     // Constructors
 
     public Category(Long id, String name, String description, List<Product> products) {
-        if(name.trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
-        if(description.trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.DESCRIPTION.toString());
         this.id = id;
         this.name = requireNonNull(name, DomainConstants.FIELD_NAME_NULL_MESSAGE);
         this.description = requireNonNull(description, DomainConstants.FIELD_DESCRIPTION_NULL_MESSAGE);
