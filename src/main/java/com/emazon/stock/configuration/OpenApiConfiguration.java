@@ -16,7 +16,6 @@ public class OpenApiConfiguration {
             @Value("${appVersion}") String appVersion
                                  ) {
         return new OpenAPI()
-                .components(new Components())
                 .info(new Info()
                         .title("Hexagonal Emazon's Stock Microservice API")
                         .version(appVersion)

@@ -1,5 +1,6 @@
 package com.emazon.stock.domain.api.usecase;
 
+import com.emazon.stock.domain.exceptions.CategoryAlreadyExistsException;
 import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
@@ -11,6 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class CategoryUseCaseTest {
@@ -34,6 +38,20 @@ class CategoryUseCaseTest {
         doNothing().when(categoryPersistencePort).save(category);
         categoryUseCase.save(category);
         verify(categoryPersistencePort).save(category);
+    }
+
+    @Test
+    void saveRepeatedName() {
+        Category category = new Category(1L, "nothing", "description", null);
+        when(categoryPersistencePort.getCategoryByName("nothing")).thenReturn(category);
+        doNothing().when(categoryPersistencePort).save(category);
+        try{
+            categoryUseCase.save(category);
+            assert(false);
+        } catch (CategoryAlreadyExistsException e){
+            assert(true);
+        }
+        verify(categoryPersistencePort, times(0)).save(category);
     }
 
     @Test
@@ -87,5 +105,28 @@ class CategoryUseCaseTest {
 
     @Test
     void getCategory() {
+        Category category = new Category(1L, "nothing", "description", null);
+        when(categoryPersistencePort.getCategory(1L)).thenReturn(category);
+        Category returnedCategory = categoryUseCase.getCategory(1L);
+        verify(categoryPersistencePort).getCategory(1L);
+        assertEquals(category.getId(), returnedCategory.getId());
+        assertEquals(category.getName(), returnedCategory.getName());
+    }
+
+    @Test
+    void getAllCategories() {
+        int page = 0;
+        String col = "";
+        boolean asc = true;
+        List<Category> mockCategories = List.of(
+                new Category(1L, "nothing", "description", null),
+                new Category(2L, "something", "second description", null)
+        );
+        when(categoryPersistencePort.getAllCategories(page, col, asc)).thenReturn(mockCategories);
+        List<Category> returnedCategories = categoryUseCase.getAllCategories(page, col, asc);
+        verify(categoryPersistencePort).getAllCategories(page, col, asc);
+        assertEquals(mockCategories.size(), returnedCategories.size());
+        assertEquals(mockCategories.get(0).getId(), returnedCategories.get(0).getId());
+        assertEquals(mockCategories.get(1).getId(), returnedCategories.get(1).getId());
     }
 }

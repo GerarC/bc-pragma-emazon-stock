@@ -21,10 +21,10 @@ public class CategoryEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 63)
     private String name;
 
     @NotNull
-    @Column(name = "description")
+    @Column(name = "description", nullable = false, length = 127)
     private String description;
 }

@@ -1,4 +1,4 @@
-package com.emazon.stock.adapters.driving.dto;
+package com.emazon.stock.adapters.driving.dto.request;
 
 import lombok.*;
 
@@ -8,9 +8,8 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDTO {
+public class CategoryRequest {
     //Attributes
-    private Long id;
     private String name;
     private String description;
 }

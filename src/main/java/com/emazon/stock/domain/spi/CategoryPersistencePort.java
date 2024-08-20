@@ -8,5 +8,6 @@ public interface CategoryPersistencePort {
     void save(Category category);
     Category getCategory(Long id);
     Category getCategoryByName(String name);
+    List<Category> getAllCategories(int page, String col, boolean asc);
     // List<Category> getAllCategories(Integer page, Integer size);
 }

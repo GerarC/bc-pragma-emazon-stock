@@ -1,11 +1,13 @@
 package com.emazon.stock.adapters.driving.rest.controller;
 
-import com.emazon.stock.adapters.driving.dto.CategoryDTO;
+import com.emazon.stock.adapters.driving.dto.request.CategoryRequest;
+import com.emazon.stock.adapters.driving.dto.response.CategoryResponse;
 import com.emazon.stock.adapters.driving.service.CategoryService;
 import com.emazon.stock.domain.exceptions.CategoryAlreadyExistsException;
 import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
+import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.utils.DomainConstants;
 import com.emazon.stock.utils.JsonParser;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,7 +41,7 @@ class CategoryControllerTest {
 
     @Test
     void createCategoryIsOK() throws Exception {
-        CategoryDTO categoryMock = CategoryDTO.builder().name("nothing").description("Nothing is a category associated with nothing").build();
+        CategoryRequest categoryMock = CategoryRequest.builder().name("nothing").description("Nothing is a category associated with nothing").build();
 
         this.mockMvc.perform(post("/categories")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -48,9 +52,9 @@ class CategoryControllerTest {
 
     @Test
     void createCategoryIsRepeated() throws Exception {
-        CategoryDTO categoryMock = CategoryDTO.builder().name("nothing").description("Another category with the same name").build();
+        CategoryRequest categoryMock = CategoryRequest.builder().name("nothing").description("Another category with the same name").build();
 
-        doThrow(new CategoryAlreadyExistsException("nothing")).when(categoryService).save(categoryMock);
+        doThrow(new CategoryAlreadyExistsException(Category.class.getSimpleName(), "nothing")).when(categoryService).save(categoryMock);
         this.mockMvc.perform(post("/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(categoryMock)) )
@@ -59,7 +63,7 @@ class CategoryControllerTest {
 
     @Test
     void createCategoryNameTooLarge() throws Exception {
-        CategoryDTO categoryMock = CategoryDTO.builder().name("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").description("category with a name with more than 50 chars").build();
+        CategoryRequest categoryMock = CategoryRequest.builder().name("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").description("category with a name with more than 50 chars").build();
 
         doThrow(new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.NAME.toString(), String.valueOf(DomainConstants.CATEGORY_NAME_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}))).when(categoryService).save(categoryMock);
         this.mockMvc.perform(post("/categories")
@@ -70,7 +74,7 @@ class CategoryControllerTest {
 
     @Test
     void createCategoryDescriptionTooLarge() throws Exception {
-        CategoryDTO categoryMock = CategoryDTO.builder().name("long description").description("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee").build();
+        CategoryRequest categoryMock = CategoryRequest.builder().name("long description").description("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee").build();
 
         doThrow(new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.DESCRIPTION.toString(), String.valueOf(DomainConstants.CATEGORY_DESCRIPTION_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}))).when(categoryService).save(categoryMock);
         this.mockMvc.perform(post("/categories")
@@ -81,7 +85,7 @@ class CategoryControllerTest {
 
     @Test
     void createCategoryNoName() throws Exception {
-        CategoryDTO categoryMock = CategoryDTO.builder().name("").description("Nothing is a category associated with nothing").build();
+        CategoryRequest categoryMock = CategoryRequest.builder().name("").description("Nothing is a category associated with nothing").build();
 
         doThrow(new EmptyFieldException("NAME")).when(categoryService).save(categoryMock);
         this.mockMvc.perform(post("/categories")
@@ -92,7 +96,7 @@ class CategoryControllerTest {
 
     @Test
     void createCategoryNoDescription() throws Exception {
-        CategoryDTO categoryMock = CategoryDTO.builder().name("nothing").description("").build();
+        CategoryRequest categoryMock = CategoryRequest.builder().name("nothing").description("").build();
 
         doThrow(new EmptyFieldException("DESCRIPTION")).when(categoryService).save(categoryMock);
         this.mockMvc.perform(post("/categories")
@@ -103,7 +107,7 @@ class CategoryControllerTest {
 
     @Test
     void getCategoryById() throws Exception {
-        CategoryDTO categoryMock = CategoryDTO.builder().id(1L).name("nothing").description("Nothing is a category associated with nothing").build();
+        CategoryResponse categoryMock = CategoryResponse.builder().id(1L).name("nothing").description("Nothing is a category associated with nothing").build();
         when(categoryService.getCategory(1L)).thenReturn(categoryMock);
         when(categoryService.getCategory(2L)).thenThrow(new EntityNotFoundException("Category with id 4 not found"));
         this.mockMvc.perform(get("/categories/1"))
@@ -113,5 +117,37 @@ class CategoryControllerTest {
         this.mockMvc.perform(get("/categories/2"))
                 .andExpect(status().isNotFound());
 
+    }
+
+    @Test
+    void getAll() throws Exception {
+        int page = 0;
+        boolean asc = true;
+        List<CategoryResponse> mockDTOs = List.of(
+                new CategoryResponse(1L, "nothing", "description"),
+                new CategoryResponse(2L, "something", "second description")
+        );
+        when(categoryService.getAllCategories(page, null, asc)).thenReturn(mockDTOs);
+        this.mockMvc.perform(get("/categories"))
+                .andExpect(content().json(JsonParser.toJson(mockDTOs)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getAllWithParams() throws Exception {
+        int page = 0;
+        String col = "name";
+        boolean asc = true;
+        List<CategoryResponse> mockDTOs = List.of(
+                new CategoryResponse(1L, "nothing", "description"),
+                new CategoryResponse(2L, "something", "second description")
+        );
+        when(categoryService.getAllCategories(page, col, asc)).thenReturn(mockDTOs);
+        this.mockMvc.perform(get("/categories")
+                        .queryParam("page", "0")
+                        .queryParam("sortBy", "name")
+                        .queryParam("asc", "true"))
+                .andExpect(content().json(JsonParser.toJson(mockDTOs)))
+                .andExpect(status().isOk());
     }
 }

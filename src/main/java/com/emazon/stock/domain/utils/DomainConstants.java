@@ -37,4 +37,7 @@ public class DomainConstants {
     public static final String CHARS_LIMIT_REACHED_MESSAGE = "chars limit reached";
     public static final String CATEGORIES_LIMIT_REACHED_MESSAGE = "categories limit reached";
 
+    // Pages
+    public static final Integer PAGE_SIZE = 10;
+
 }

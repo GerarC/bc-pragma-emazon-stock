@@ -9,6 +9,8 @@ import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.spi.CategoryPersistencePort;
 import com.emazon.stock.domain.utils.DomainConstants;
 
+import java.util.List;
+
 public class CategoryUseCase implements CategoryServicePort {
 
     private final CategoryPersistencePort categoryPersistencePort;
@@ -28,7 +30,7 @@ public class CategoryUseCase implements CategoryServicePort {
 
         try {
             categoryPersistencePort.getCategoryByName(category.getName());
-            throw new CategoryAlreadyExistsException(category.getName());
+            throw new CategoryAlreadyExistsException(Category.class.getSimpleName(), category.getName());
         } catch (EntityNotFoundException e) {
             categoryPersistencePort.save(category);
         }
@@ -37,5 +39,10 @@ public class CategoryUseCase implements CategoryServicePort {
     @Override
     public Category getCategory(Long id) {
         return categoryPersistencePort.getCategory(id);
+    }
+
+    @Override
+    public List<Category> getAllCategories(int page, String col, boolean asc) {
+        return categoryPersistencePort.getAllCategories(page, col, asc);
     }
 }

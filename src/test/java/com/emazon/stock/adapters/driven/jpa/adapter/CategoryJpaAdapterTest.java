@@ -10,10 +10,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -53,11 +58,11 @@ class CategoryJpaAdapterTest {
         Category categoryReturned = categoryJpaAdapter.getCategory(1L);
         verify(categoryRepository).findById(1L);
         assertEquals(category, categoryReturned);
-        try{
+        try {
             categoryJpaAdapter.getCategory(2L);
-            assert(false);
-        }catch(EntityNotFoundException e){
-            assert(true);
+            assert (false);
+        } catch (EntityNotFoundException e) {
+            assert (true);
         }
     }
 
@@ -71,11 +76,70 @@ class CategoryJpaAdapterTest {
         Category categoryReturned = categoryJpaAdapter.getCategoryByName("nothing");
         verify(categoryRepository).findByName("nothing");
         assertEquals(category, categoryReturned);
-        try{
+        try {
             categoryJpaAdapter.getCategoryByName("another");
-            assert(false);
-        }catch(EntityNotFoundException e){
-            assert(true);
+            assert (false);
+        } catch (EntityNotFoundException e) {
+            assert (true);
         }
+    }
+
+    @Test
+    void getAllCategories() {
+        int page = 0;
+        boolean asc = true;
+        Page<CategoryEntity> categoryEntities = new PageImpl<>(List.of(
+                new CategoryEntity(1L, "nothing", "description"),
+                new CategoryEntity(2L, "something", "second description")
+        ));
+        List<Category> mockCategories = List.of(
+                new Category(1L, "nothing", "description", null),
+                new Category(2L, "something", "second description", null)
+        );
+        when(categoryRepository.findAll(any(Pageable.class))).thenReturn(categoryEntities);
+        when(categoryEntityMapper.toCategories(any())).thenReturn(mockCategories);
+        List<Category> returnedCategories = categoryJpaAdapter.getAllCategories(page, null, asc);
+        assertEquals(mockCategories.get(0).getName(), returnedCategories.get(0).getName());
+        assertEquals(mockCategories.get(1).getName(), returnedCategories.get(1).getName());
+    }
+
+    @Test
+    void getAllCategoriesSorted() {
+        int page = 0;
+        String col = "name";
+        boolean asc = true;
+        Page<CategoryEntity> categoryEntities = new PageImpl<>(List.of(
+                new CategoryEntity(1L, "nothing", "description"),
+                new CategoryEntity(2L, "something", "second description")
+        ));
+        List<Category> mockCategories = List.of(
+                new Category(1L, "nothing", "description", null),
+                new Category(2L, "something", "second description", null)
+        );
+        when(categoryRepository.findAll(any(Pageable.class))).thenReturn(categoryEntities);
+        when(categoryEntityMapper.toCategories(any())).thenReturn(mockCategories);
+        List<Category> returnedCategories = categoryJpaAdapter.getAllCategories(page, col, asc);
+        assertEquals(mockCategories.get(0).getName(), returnedCategories.get(0).getName());
+        assertEquals(mockCategories.get(1).getName(), returnedCategories.get(1).getName());
+    }
+
+    @Test
+    void getAllCategoriesSortedDesc() {
+        int page = 0;
+        String col = "name";
+        boolean asc = false;
+        Page<CategoryEntity> categoryEntities = new PageImpl<>(List.of(
+                new CategoryEntity(2L, "something", "second description"),
+                new CategoryEntity(1L, "nothing", "description")
+        ));
+        List<Category> mockCategories = List.of(
+                new Category(2L, "something", "second description", null),
+                new Category(1L, "nothing", "description", null)
+        );
+        when(categoryRepository.findAll(any(Pageable.class))).thenReturn(categoryEntities);
+        when(categoryEntityMapper.toCategories(any())).thenReturn(mockCategories);
+        List<Category> returnedCategories = categoryJpaAdapter.getAllCategories(page, col, asc);
+        assertEquals(mockCategories.get(0).getName(), returnedCategories.get(0).getName());
+        assertEquals(mockCategories.get(1).getName(), returnedCategories.get(1).getName());
     }
 }
