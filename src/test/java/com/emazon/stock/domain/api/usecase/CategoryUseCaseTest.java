@@ -5,6 +5,7 @@ import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.model.Category;
+import com.emazon.stock.domain.model.DomainPage;
 import com.emazon.stock.domain.spi.CategoryPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,11 +46,11 @@ class CategoryUseCaseTest {
         Category category = new Category(1L, "nothing", "description", null);
         when(categoryPersistencePort.getCategoryByName("nothing")).thenReturn(category);
         doNothing().when(categoryPersistencePort).save(category);
-        try{
+        try {
             categoryUseCase.save(category);
-            assert(false);
-        } catch (CategoryAlreadyExistsException e){
-            assert(true);
+            assert (false);
+        } catch (CategoryAlreadyExistsException e) {
+            assert (true);
         }
         verify(categoryPersistencePort, times(0)).save(category);
     }
@@ -57,11 +58,11 @@ class CategoryUseCaseTest {
     @Test
     void saveNotName() {
         Category category = new Category(1L, "", "description", null);
-        try{
+        try {
             categoryUseCase.save(category);
-            assert(false);
+            assert (false);
         } catch (EmptyFieldException e) {
-            assert(true);
+            assert (true);
         }
 
         verify(categoryPersistencePort, times(0)).save(category);
@@ -70,11 +71,11 @@ class CategoryUseCaseTest {
     @Test
     void saveNotDescription() {
         Category category = new Category(1L, "name", "", null);
-        try{
+        try {
             categoryUseCase.save(category);
-            assert(false);
+            assert (false);
         } catch (EmptyFieldException e) {
-            assert(true);
+            assert (true);
         }
         verify(categoryPersistencePort, times(0)).save(category);
     }
@@ -82,11 +83,11 @@ class CategoryUseCaseTest {
     @Test
     void saveTooLargeName() {
         Category category = new Category(1L, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", "description", null);
-        try{
+        try {
             categoryUseCase.save(category);
-            assert(false);
+            assert (false);
         } catch (OutOfBoundsException e) {
-            assert(true);
+            assert (true);
         }
         verify(categoryPersistencePort, times(0)).save(category);
     }
@@ -94,11 +95,11 @@ class CategoryUseCaseTest {
     @Test
     void saveTooLargeDescription() {
         Category category = new Category(1L, "nothing", "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", null);
-        try{
+        try {
             categoryUseCase.save(category);
-            assert(false);
+            assert (false);
         } catch (OutOfBoundsException e) {
-            assert(true);
+            assert (true);
         }
         verify(categoryPersistencePort, times(0)).save(category);
     }
@@ -118,15 +119,16 @@ class CategoryUseCaseTest {
         int page = 0;
         String col = "";
         boolean asc = true;
-        List<Category> mockCategories = List.of(
+        DomainPage<Category> mockCategories = new DomainPage<>();
+        mockCategories.setContent(List.of(
                 new Category(1L, "nothing", "description", null),
                 new Category(2L, "something", "second description", null)
-        );
+        ));
         when(categoryPersistencePort.getAllCategories(page, col, asc)).thenReturn(mockCategories);
-        List<Category> returnedCategories = categoryUseCase.getAllCategories(page, col, asc);
+        DomainPage<Category> returnedCategories = categoryUseCase.getAllCategories(page, col, asc);
         verify(categoryPersistencePort).getAllCategories(page, col, asc);
-        assertEquals(mockCategories.size(), returnedCategories.size());
-        assertEquals(mockCategories.get(0).getId(), returnedCategories.get(0).getId());
-        assertEquals(mockCategories.get(1).getId(), returnedCategories.get(1).getId());
+        assertEquals(mockCategories.getContent().size(), returnedCategories.getContent().size());
+        assertEquals(mockCategories.getContent().get(0).getId(), returnedCategories.getContent().get(0).getId());
+        assertEquals(mockCategories.getContent().get(1).getId(), returnedCategories.getContent().get(1).getId());
     }
 }

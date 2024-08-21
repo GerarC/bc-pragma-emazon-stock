@@ -1,10 +1,11 @@
-package com.emazon.stock.adapters.driving.service.impl;
+package com.emazon.stock.adapters.driving.rest.service.impl;
 
-import com.emazon.stock.adapters.driving.dto.request.CategoryRequest;
-import com.emazon.stock.adapters.driving.dto.response.CategoryResponse;
-import com.emazon.stock.adapters.driving.mapper.request.CategoryRequestMapper;
-import com.emazon.stock.adapters.driving.mapper.response.CategoryResponseMapper;
-import com.emazon.stock.adapters.driving.service.CategoryService;
+import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
+import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
+import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.mapper.request.CategoryRequestMapper;
+import com.emazon.stock.adapters.driving.rest.mapper.response.CategoryResponseMapper;
+import com.emazon.stock.adapters.driving.rest.service.CategoryService;
 import com.emazon.stock.domain.api.CategoryServicePort;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryResponse> getAllCategories(int page, String col, boolean asc) {
-        return categoryResponseMapper.toResponses(categoryServicePort.getAllCategories(page, col, asc));
+    public ResponsePage<CategoryResponse> getAllCategories(int page, String col, boolean asc) {
+        return categoryResponseMapper.toResponsePage(categoryServicePort.getAllCategories(page, col, asc));
     }
 }

@@ -1,4 +1,4 @@
-package com.emazon.stock.adapters.driving.dto.request;
+package com.emazon.stock.adapters.driving.rest.dto.request;
 
 import lombok.*;
 

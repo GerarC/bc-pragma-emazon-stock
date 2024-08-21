@@ -1,12 +1,14 @@
-package com.emazon.stock.adapters.driving.service.impl;
+package com.emazon.stock.adapters.driving.rest.service.impl;
 
-import com.emazon.stock.adapters.driving.dto.request.CategoryRequest;
-import com.emazon.stock.adapters.driving.dto.response.CategoryResponse;
-import com.emazon.stock.adapters.driving.mapper.request.CategoryRequestMapper;
-import com.emazon.stock.adapters.driving.mapper.response.CategoryResponseMapper;
+import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
+import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
+import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.mapper.request.CategoryRequestMapper;
+import com.emazon.stock.adapters.driving.rest.mapper.response.CategoryResponseMapper;
 import com.emazon.stock.domain.api.CategoryServicePort;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.model.Category;
+import com.emazon.stock.domain.model.DomainPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -59,11 +61,11 @@ class CategoryServiceImplTest {
         CategoryResponse categoryReturned = categoryService.getCategory(1L);
         verify(categoryServicePort).getCategory(1L);
         assertEquals(categoryResponse, categoryReturned);
-        try{
+        try {
             categoryService.getCategory(2L);
-            assert(false);
-        }catch(EntityNotFoundException e){
-            assert(true);
+            assert (false);
+        } catch (EntityNotFoundException e) {
+            assert (true);
         }
     }
 
@@ -72,19 +74,21 @@ class CategoryServiceImplTest {
         int page = 0;
         String col = "";
         boolean asc = true;
-        List<Category> mockCategories = List.of(
+        DomainPage<Category> mockCategories = new DomainPage<>();
+        mockCategories.setContent(List.of(
                 new Category(1L, "nothing", "description", null),
                 new Category(2L, "something", "second description", null)
-        );
-        List<CategoryResponse> mockDTOs = List.of(
+        ));
+        ResponsePage<CategoryResponse> mockDTOs = new ResponsePage<>();
+        mockDTOs.setContent(List.of(
                 new CategoryResponse(1L, "nothing", "description"),
                 new CategoryResponse(2L, "something", "second description")
-        );
+        ));
         when(categoryServicePort.getAllCategories(page, col, asc)).thenReturn(mockCategories);
-        when(categoryResponseMapper.toResponses(mockCategories)).thenReturn(mockDTOs);
-        List<CategoryResponse> returnedDTOs = categoryService.getAllCategories(page, col, asc);
+        when(categoryResponseMapper.toResponsePage(mockCategories)).thenReturn(mockDTOs);
+        ResponsePage<CategoryResponse> returnedDTOs = categoryService.getAllCategories(page, col, asc);
         verify(categoryServicePort).getAllCategories(page, col, asc);
-        assertEquals(mockDTOs.size(), returnedDTOs.size());
-        assertEquals(mockDTOs.get(0).getId(), returnedDTOs.get(0).getId());
+        assertEquals(mockDTOs.getContent().size(), returnedDTOs.getContent().size());
+        assertEquals(mockDTOs.getContent().get(0).getId(), returnedDTOs.getContent().get(0).getId());
     }
 }

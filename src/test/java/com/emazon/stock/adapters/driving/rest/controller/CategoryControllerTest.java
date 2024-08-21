@@ -1,8 +1,9 @@
 package com.emazon.stock.adapters.driving.rest.controller;
 
-import com.emazon.stock.adapters.driving.dto.request.CategoryRequest;
-import com.emazon.stock.adapters.driving.dto.response.CategoryResponse;
-import com.emazon.stock.adapters.driving.service.CategoryService;
+import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
+import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
+import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.service.CategoryService;
 import com.emazon.stock.domain.exceptions.CategoryAlreadyExistsException;
 import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
@@ -45,7 +46,7 @@ class CategoryControllerTest {
 
         this.mockMvc.perform(post("/categories")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonParser.toJson(categoryMock)) )
+                        .content(JsonParser.toJson(categoryMock)))
                 .andExpect(status().isCreated());
         verify(categoryService, times(1)).save(categoryMock);
     }
@@ -57,7 +58,7 @@ class CategoryControllerTest {
         doThrow(new CategoryAlreadyExistsException(Category.class.getSimpleName(), "nothing")).when(categoryService).save(categoryMock);
         this.mockMvc.perform(post("/categories")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonParser.toJson(categoryMock)) )
+                        .content(JsonParser.toJson(categoryMock)))
                 .andExpect(status().isConflict());
     }
 
@@ -68,7 +69,7 @@ class CategoryControllerTest {
         doThrow(new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.NAME.toString(), String.valueOf(DomainConstants.CATEGORY_NAME_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}))).when(categoryService).save(categoryMock);
         this.mockMvc.perform(post("/categories")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonParser.toJson(categoryMock)) )
+                        .content(JsonParser.toJson(categoryMock)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -123,10 +124,11 @@ class CategoryControllerTest {
     void getAll() throws Exception {
         int page = 0;
         boolean asc = true;
-        List<CategoryResponse> mockDTOs = List.of(
+        ResponsePage<CategoryResponse> mockDTOs = new ResponsePage<>();
+        mockDTOs.setContent(List.of(
                 new CategoryResponse(1L, "nothing", "description"),
                 new CategoryResponse(2L, "something", "second description")
-        );
+        ));
         when(categoryService.getAllCategories(page, null, asc)).thenReturn(mockDTOs);
         this.mockMvc.perform(get("/categories"))
                 .andExpect(content().json(JsonParser.toJson(mockDTOs)))
@@ -138,10 +140,11 @@ class CategoryControllerTest {
         int page = 0;
         String col = "name";
         boolean asc = true;
-        List<CategoryResponse> mockDTOs = List.of(
+        ResponsePage<CategoryResponse> mockDTOs = new ResponsePage<>();
+        mockDTOs.setContent(List.of(
                 new CategoryResponse(1L, "nothing", "description"),
                 new CategoryResponse(2L, "something", "second description")
-        );
+        ));
         when(categoryService.getAllCategories(page, col, asc)).thenReturn(mockDTOs);
         this.mockMvc.perform(get("/categories")
                         .queryParam("page", "0")

@@ -6,6 +6,7 @@ import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.model.Category;
+import com.emazon.stock.domain.model.DomainPage;
 import com.emazon.stock.domain.spi.CategoryPersistencePort;
 import com.emazon.stock.domain.utils.DomainConstants;
 
@@ -42,7 +43,7 @@ public class CategoryUseCase implements CategoryServicePort {
     }
 
     @Override
-    public List<Category> getAllCategories(int page, String col, boolean asc) {
+    public DomainPage<Category> getAllCategories(int page, String col, boolean asc) {
         return categoryPersistencePort.getAllCategories(page, col, asc);
     }
 }
