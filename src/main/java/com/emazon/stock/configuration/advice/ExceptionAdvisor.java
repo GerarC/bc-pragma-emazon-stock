@@ -1,6 +1,6 @@
 package com.emazon.stock.configuration.advice;
 
-import com.emazon.stock.domain.exceptions.CategoryAlreadyExistsException;
+import com.emazon.stock.domain.exceptions.EntityAlreadyExistsException;
 import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
@@ -51,8 +51,8 @@ public class ExceptionAdvisor {
         return ResponseEntity.status(exceptionResponse.getStatusCode()).body(exceptionResponse);
     }
 
-    @ExceptionHandler(CategoryAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> handleCategoryNameAlreadyExistsException(CategoryAlreadyExistsException e) {
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleCategoryNameAlreadyExistsException(EntityAlreadyExistsException e) {
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .statusCode(HttpStatus.CONFLICT)
                 .timestamp(LocalDateTime.now())

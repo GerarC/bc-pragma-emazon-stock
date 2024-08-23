@@ -4,13 +4,13 @@ import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
 import com.emazon.stock.adapters.driving.rest.service.CategoryService;
-import com.emazon.stock.domain.exceptions.CategoryAlreadyExistsException;
+import com.emazon.stock.domain.exceptions.EntityAlreadyExistsException;
 import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.utils.DomainConstants;
-import com.emazon.stock.utils.JsonParser;
+import com.emazon.stock.adapters.driving.rest.utils.JsonParser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -55,7 +55,7 @@ class CategoryControllerTest {
     void createCategoryIsRepeated() throws Exception {
         CategoryRequest categoryMock = CategoryRequest.builder().name("nothing").description("Another category with the same name").build();
 
-        doThrow(new CategoryAlreadyExistsException(Category.class.getSimpleName(), "nothing")).when(categoryService).save(categoryMock);
+        doThrow(new EntityAlreadyExistsException(Category.class.getSimpleName(), "nothing")).when(categoryService).save(categoryMock);
         this.mockMvc.perform(post("/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(categoryMock)))
@@ -66,7 +66,7 @@ class CategoryControllerTest {
     void createCategoryNameTooLarge() throws Exception {
         CategoryRequest categoryMock = CategoryRequest.builder().name("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").description("category with a name with more than 50 chars").build();
 
-        doThrow(new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.NAME.toString(), String.valueOf(DomainConstants.CATEGORY_NAME_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}))).when(categoryService).save(categoryMock);
+        doThrow(new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.NAME.toString(), String.valueOf(DomainConstants.NAME_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}))).when(categoryService).save(categoryMock);
         this.mockMvc.perform(post("/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(categoryMock)))

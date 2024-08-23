@@ -30,8 +30,9 @@ public class DomainConstants {
     // bound limits
 
     public static final Integer FIELD_CATEGORIES_LIMIT = 3;
-    public static final Integer CATEGORY_NAME_LENGTH_LIMIT = 50;
+    public static final Integer NAME_LENGTH_LIMIT = 50;
     public static final Integer CATEGORY_DESCRIPTION_LENGTH_LIMIT = 90;
+    public static final Integer BRAND_DESCRIPTION_LENGTH_LIMIT = 120;
 
     // Out of bounds
     public static final String CHARS_LIMIT_REACHED_MESSAGE = "chars limit reached";

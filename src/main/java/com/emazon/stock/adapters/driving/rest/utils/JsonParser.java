@@ -1,4 +1,4 @@
-package com.emazon.stock.utils;
+package com.emazon.stock.adapters.driving.rest.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

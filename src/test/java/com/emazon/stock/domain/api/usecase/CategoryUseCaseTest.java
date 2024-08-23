@@ -1,11 +1,11 @@
 package com.emazon.stock.domain.api.usecase;
 
-import com.emazon.stock.domain.exceptions.CategoryAlreadyExistsException;
+import com.emazon.stock.domain.exceptions.EntityAlreadyExistsException;
 import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.model.Category;
-import com.emazon.stock.domain.model.DomainPage;
+import com.emazon.stock.domain.utils.DomainPage;
 import com.emazon.stock.domain.spi.CategoryPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class CategoryUseCaseTest {
@@ -46,61 +47,35 @@ class CategoryUseCaseTest {
         Category category = new Category(1L, "nothing", "description", null);
         when(categoryPersistencePort.getCategoryByName("nothing")).thenReturn(category);
         doNothing().when(categoryPersistencePort).save(category);
-        try {
-            categoryUseCase.save(category);
-            assert (false);
-        } catch (CategoryAlreadyExistsException e) {
-            assert (true);
-        }
+        assertThrows(EntityAlreadyExistsException.class, () -> categoryUseCase.save(category));
         verify(categoryPersistencePort, times(0)).save(category);
     }
 
     @Test
     void saveNotName() {
         Category category = new Category(1L, "", "description", null);
-        try {
-            categoryUseCase.save(category);
-            assert (false);
-        } catch (EmptyFieldException e) {
-            assert (true);
-        }
-
+        assertThrows(EmptyFieldException.class, () -> categoryUseCase.save(category));
         verify(categoryPersistencePort, times(0)).save(category);
     }
 
     @Test
     void saveNotDescription() {
         Category category = new Category(1L, "name", "", null);
-        try {
-            categoryUseCase.save(category);
-            assert (false);
-        } catch (EmptyFieldException e) {
-            assert (true);
-        }
+        assertThrows(EmptyFieldException.class, () -> categoryUseCase.save(category));
         verify(categoryPersistencePort, times(0)).save(category);
     }
 
     @Test
     void saveTooLargeName() {
         Category category = new Category(1L, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", "description", null);
-        try {
-            categoryUseCase.save(category);
-            assert (false);
-        } catch (OutOfBoundsException e) {
-            assert (true);
-        }
+        assertThrows(OutOfBoundsException.class, () -> categoryUseCase.save(category));
         verify(categoryPersistencePort, times(0)).save(category);
     }
 
     @Test
     void saveTooLargeDescription() {
         Category category = new Category(1L, "nothing", "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", null);
-        try {
-            categoryUseCase.save(category);
-            assert (false);
-        } catch (OutOfBoundsException e) {
-            assert (true);
-        }
+        assertThrows(OutOfBoundsException.class, () -> categoryUseCase.save(category));
         verify(categoryPersistencePort, times(0)).save(category);
     }
 

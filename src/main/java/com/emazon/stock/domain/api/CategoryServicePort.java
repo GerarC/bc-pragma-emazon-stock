@@ -1,9 +1,7 @@
 package com.emazon.stock.domain.api;
 
 import com.emazon.stock.domain.model.Category;
-import com.emazon.stock.domain.model.DomainPage;
-
-import java.util.List;
+import com.emazon.stock.domain.utils.DomainPage;
 
 public interface CategoryServicePort {
     void save(Category category);

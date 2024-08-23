@@ -1,11 +1,6 @@
 package com.emazon.stock.domain.model;
 
-import com.emazon.stock.domain.exceptions.EmptyFieldException;
-import com.emazon.stock.domain.utils.DomainConstants;
-
 import java.util.List;
-
-import static java.util.Objects.requireNonNull;
 
 public class Brand {
     // Attributes

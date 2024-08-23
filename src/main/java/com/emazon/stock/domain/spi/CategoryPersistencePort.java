@@ -1,7 +1,7 @@
 package com.emazon.stock.domain.spi;
 
 import com.emazon.stock.domain.model.Category;
-import com.emazon.stock.domain.model.DomainPage;
+import com.emazon.stock.domain.utils.DomainPage;
 
 public interface CategoryPersistencePort {
     void save(Category category);

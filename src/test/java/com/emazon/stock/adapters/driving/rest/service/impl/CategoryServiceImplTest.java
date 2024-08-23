@@ -8,7 +8,7 @@ import com.emazon.stock.adapters.driving.rest.mapper.response.CategoryResponseMa
 import com.emazon.stock.domain.api.CategoryServicePort;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.model.Category;
-import com.emazon.stock.domain.model.DomainPage;
+import com.emazon.stock.domain.utils.DomainPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -55,18 +55,16 @@ class CategoryServiceImplTest {
     void getCategory() {
         Category category = new Category(1L, "nothing", "description", null);
         CategoryResponse categoryResponse = new CategoryResponse(1L, "nothing", "description");
+
         when(categoryServicePort.getCategory(1L)).thenReturn(category);
         when(categoryServicePort.getCategory(2L)).thenThrow(new EntityNotFoundException("Category with id 2 not found"));
         when(categoryResponseMapper.toResponse(category)).thenReturn(categoryResponse);
+
         CategoryResponse categoryReturned = categoryService.getCategory(1L);
         verify(categoryServicePort).getCategory(1L);
         assertEquals(categoryResponse, categoryReturned);
-        try {
-            categoryService.getCategory(2L);
-            assert (false);
-        } catch (EntityNotFoundException e) {
-            assert (true);
-        }
+
+        assertThrows(EntityNotFoundException.class, () -> categoryService.getCategory(2L));
     }
 
     @Test
@@ -84,8 +82,10 @@ class CategoryServiceImplTest {
                 new CategoryResponse(1L, "nothing", "description"),
                 new CategoryResponse(2L, "something", "second description")
         ));
+
         when(categoryServicePort.getAllCategories(page, col, asc)).thenReturn(mockCategories);
         when(categoryResponseMapper.toResponsePage(mockCategories)).thenReturn(mockDTOs);
+
         ResponsePage<CategoryResponse> returnedDTOs = categoryService.getAllCategories(page, col, asc);
         verify(categoryServicePort).getAllCategories(page, col, asc);
         assertEquals(mockDTOs.getContent().size(), returnedDTOs.getContent().size());

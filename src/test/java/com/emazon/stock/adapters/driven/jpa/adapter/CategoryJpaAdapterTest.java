@@ -5,7 +5,7 @@ import com.emazon.stock.adapters.driven.jpa.mapper.CategoryEntityMapper;
 import com.emazon.stock.adapters.driven.jpa.persistence.CategoryRepository;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.model.Category;
-import com.emazon.stock.domain.model.DomainPage;
+import com.emazon.stock.domain.utils.DomainPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
