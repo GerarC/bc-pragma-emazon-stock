@@ -1,8 +1,8 @@
 package com.emazon.stock.adapters.driven.jpa.mapper;
 
 
-import com.emazon.stock.adapters.driven.jpa.entity.BrandEntity;
-import com.emazon.stock.domain.model.Brand;
+import com.emazon.stock.adapters.driven.jpa.entity.ProductEntity;
+import com.emazon.stock.domain.model.Product;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,12 +14,12 @@ import java.util.List;
 @Mapper(componentModel = "spring",
         unmappedSourcePolicy = ReportingPolicy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface BrandEntityMapper {
-    BrandEntity toEntity(Brand brand);
+public interface ProductEntityMapper {
+    ProductEntity toEntity(Product product);
 
-    Brand toBrand(BrandEntity brandEntity);
+    Product toProduct(ProductEntity productEntity);
 
-    List<Brand> toBrands(List<BrandEntity> brandEntities);
+    List<Product> toProducts(List<ProductEntity> productEntities);
 
     @Mapping(target = "page", source = "number")
     @Mapping(target = "pageSize", source = "size")
@@ -27,5 +27,5 @@ public interface BrandEntityMapper {
     @Mapping(target = "count", source = "numberOfElements")
     @Mapping(target = "totalCount", source = "totalElements")
     @Mapping(target = "content", source = "content")
-    DomainPage<Brand> toDomainPage(Page<BrandEntity> brandEntities);
+    DomainPage<Product> toDomainPage(Page<ProductEntity> productEntities);
 }

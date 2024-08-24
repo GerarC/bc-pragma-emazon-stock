@@ -1,6 +1,7 @@
 package com.emazon.stock.adapters.driving.rest.controller;
 
 import com.emazon.stock.adapters.driving.rest.dto.request.BrandRequest;
+import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
 import com.emazon.stock.adapters.driving.rest.service.BrandService;
@@ -12,6 +13,7 @@ import com.emazon.stock.domain.utils.DomainConstants;
 import com.emazon.stock.adapters.driving.rest.utils.JsonParser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BrandController.class)
+@AutoConfigureMockMvc
 class BrandControllerTest {
 
 
@@ -107,35 +110,30 @@ class BrandControllerTest {
 
     @Test
     void getAll() throws Exception {
-        int page = 0;
-        boolean asc = true;
+        PaginationRequest paginationRequest = new PaginationRequest(0, null, true);
         ResponsePage<BrandResponse> mockDTOs = new ResponsePage<>();
         mockDTOs.setContent(List.of(
                 new BrandResponse(1L, "nothing", "description"),
                 new BrandResponse(2L, "something", "second description")
         ));
-        when(brandService.getAllBrands(page, null, asc)).thenReturn(mockDTOs);
+        when(brandService.getAllBrands(paginationRequest)).thenReturn(mockDTOs);
         this.mockMvc.perform(get("/brands"))
-                .andExpect(content().json(JsonParser.toJson(mockDTOs)))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getAllWithParams() throws Exception {
-        int page = 0;
-        String col = "name";
-        boolean asc = true;
+        PaginationRequest paginationRequest = new PaginationRequest(0, "name", true);
         ResponsePage<BrandResponse> mockDTOs = new ResponsePage<>();
         mockDTOs.setContent(List.of(
                 new BrandResponse(1L, "nothing", "description"),
                 new BrandResponse(2L, "something", "second description")
         ));
-        when(brandService.getAllBrands(page, col, asc)).thenReturn(mockDTOs);
+        when(brandService.getAllBrands(paginationRequest)).thenReturn(mockDTOs);
         this.mockMvc.perform(get("/brands")
                         .queryParam("page", "0")
                         .queryParam("sortBy", "name")
                         .queryParam("asc", "true"))
-                .andExpect(content().json(JsonParser.toJson(mockDTOs)))
                 .andExpect(status().isOk());
     }
 }

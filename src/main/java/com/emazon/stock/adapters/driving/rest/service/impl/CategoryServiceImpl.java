@@ -1,9 +1,11 @@
 package com.emazon.stock.adapters.driving.rest.service.impl;
 
 import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
+import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
 import com.emazon.stock.adapters.driving.rest.mapper.request.CategoryRequestMapper;
+import com.emazon.stock.adapters.driving.rest.mapper.request.PaginationRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.response.CategoryResponseMapper;
 import com.emazon.stock.adapters.driving.rest.service.CategoryService;
 import com.emazon.stock.domain.api.CategoryServicePort;
@@ -18,6 +20,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryServicePort categoryServicePort;
     private final CategoryResponseMapper categoryResponseMapper;
     private final CategoryRequestMapper categoryRequestMapper;
+    private final PaginationRequestMapper paginationRequestMapper;
 
     @Override
     public void save(CategoryRequest categoryRequest) {
@@ -30,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ResponsePage<CategoryResponse> getAllCategories(int page, String col, boolean asc) {
-        return categoryResponseMapper.toResponsePage(categoryServicePort.getAllCategories(page, col, asc));
+    public ResponsePage<CategoryResponse> getAllCategories(PaginationRequest paginationRequest) {
+        return categoryResponseMapper.toResponsePage(categoryServicePort.getAllCategories(paginationRequestMapper.toPaginationData(paginationRequest)));
     }
 }

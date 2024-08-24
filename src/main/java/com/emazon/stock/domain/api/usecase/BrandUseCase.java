@@ -6,9 +6,13 @@ import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.model.Brand;
-import com.emazon.stock.domain.utils.DomainPage;
+import com.emazon.stock.domain.utils.pagination.DomainPage;
 import com.emazon.stock.domain.spi.BrandPersistencePort;
 import com.emazon.stock.domain.utils.DomainConstants;
+import com.emazon.stock.domain.utils.pagination.PaginationData;
+
+import static com.emazon.stock.domain.utils.ValidationUtils.validateDescription;
+import static com.emazon.stock.domain.utils.ValidationUtils.validateName;
 
 public class BrandUseCase implements BrandServicePort {
 
@@ -20,12 +24,8 @@ public class BrandUseCase implements BrandServicePort {
 
     @Override
     public void save(Brand brand) {
-        if(brand.getName().trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
-        if(brand.getDescription().trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.DESCRIPTION.toString());
-        if(brand.getName().trim().length() > DomainConstants.NAME_LENGTH_LIMIT)
-            throw new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.NAME.toString(), String.valueOf(DomainConstants.NAME_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}));
-        if(brand.getDescription().trim().length() > DomainConstants.NAME_LENGTH_LIMIT)
-            throw new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.DESCRIPTION.toString(), String.valueOf(DomainConstants.BRAND_DESCRIPTION_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}));
+        validateName(brand.getName(), DomainConstants.NAME_LENGTH_LIMIT);
+        validateDescription(brand.getDescription(), DomainConstants.BRAND_DESCRIPTION_LENGTH_LIMIT);
 
         try {
             brandPersistencePort.getBrandByName(brand.getName());
@@ -36,7 +36,7 @@ public class BrandUseCase implements BrandServicePort {
     }
 
     @Override
-    public DomainPage<Brand> getAllBrands(int page, String col, boolean asc) {
-        return brandPersistencePort.getAllBrands(page, col, asc);
+    public DomainPage<Brand> getAllBrands(PaginationData paginationData) {
+        return brandPersistencePort.getAllBrands(paginationData);
     }
 }

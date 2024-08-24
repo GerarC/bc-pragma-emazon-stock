@@ -1,9 +1,11 @@
 package com.emazon.stock.adapters.driving.rest.service.impl;
 
 import com.emazon.stock.adapters.driving.rest.dto.request.BrandRequest;
+import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
 import com.emazon.stock.adapters.driving.rest.mapper.request.BrandRequestMapper;
+import com.emazon.stock.adapters.driving.rest.mapper.request.PaginationRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.response.BrandResponseMapper;
 import com.emazon.stock.adapters.driving.rest.service.BrandService;
 import com.emazon.stock.domain.api.BrandServicePort;
@@ -18,6 +20,7 @@ public class BrandServiceImpl implements BrandService {
     private final BrandServicePort brandServicePort;
     private final BrandResponseMapper brandResponseMapper;
     private final BrandRequestMapper brandRequestMapper;
+    private final PaginationRequestMapper paginationRequestMapper;
 
     @Override
     public void save(BrandRequest brandRequest) {
@@ -25,7 +28,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public ResponsePage<BrandResponse> getAllBrands(int page, String col, boolean asc) {
-        return brandResponseMapper.toResponsePage(brandServicePort.getAllBrands(page, col, asc));
+    public ResponsePage<BrandResponse> getAllBrands(PaginationRequest paginationRequest) {
+        return brandResponseMapper.toResponsePage(brandServicePort.getAllBrands(paginationRequestMapper.toPaginationData(paginationRequest)));
     }
 }

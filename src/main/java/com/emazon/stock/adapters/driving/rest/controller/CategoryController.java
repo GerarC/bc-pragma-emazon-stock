@@ -1,6 +1,7 @@
 package com.emazon.stock.adapters.driving.rest.controller;
 
 import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
+import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
 import com.emazon.stock.adapters.driving.rest.service.CategoryService;
@@ -14,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -59,13 +59,8 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<ResponsePage<CategoryResponse>> getAll(@RequestParam Map<String, String> query) {
         ResponsePage<CategoryResponse> foundCategories;
-        String sortBy = null;
-        int page = 0;
-        boolean asc = true;
-        if(query.containsKey("sortBy")) sortBy = query.get("sortBy");
-        if (query.containsKey("page")) page = Integer.parseInt(query.get("page"));
-        if (query.containsKey("asc")) asc = Boolean.parseBoolean(query.get("asc"));
-        foundCategories = categoryService.getAllCategories(page, sortBy, asc);
+        PaginationRequest paginationRequest = new PaginationRequest(query);
+        foundCategories = categoryService.getAllCategories(paginationRequest);
         return ResponseEntity.ok(foundCategories);
     }
 }

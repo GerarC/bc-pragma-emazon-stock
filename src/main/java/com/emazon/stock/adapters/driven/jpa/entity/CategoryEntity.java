@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,4 +29,7 @@ public class CategoryEntity {
     @NotNull
     @Column(name = "description", nullable = false, length = 127)
     private String description;
+
+    @ManyToMany(mappedBy = "categories")
+    private Set<ProductEntity> products;
 }

@@ -4,7 +4,7 @@ package com.emazon.stock.adapters.driving.rest.mapper.response;
 import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
 import com.emazon.stock.domain.model.Brand;
-import com.emazon.stock.domain.utils.DomainPage;
+import com.emazon.stock.domain.utils.pagination.DomainPage;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

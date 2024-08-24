@@ -5,8 +5,9 @@ import com.emazon.stock.domain.exceptions.EntityAlreadyExistsException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.model.Brand;
-import com.emazon.stock.domain.utils.DomainPage;
+import com.emazon.stock.domain.utils.pagination.DomainPage;
 import com.emazon.stock.domain.spi.BrandPersistencePort;
+import com.emazon.stock.domain.utils.pagination.PaginationData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -84,17 +85,15 @@ class BrandUseCaseTest {
 
     @Test
     void getAllBrands() {
-        int page = 0;
-        String col = "";
-        boolean asc = true;
+        PaginationData paginationData = new PaginationData(0, null, true);
         DomainPage<Brand> mockBrands = new DomainPage<>();
         mockBrands.setContent(List.of(
                 new Brand(1L, "nothing", "description", null),
                 new Brand(2L, "something", "second description", null)
         ));
-        when(brandPersistencePort.getAllBrands(page, col, asc)).thenReturn(mockBrands);
-        DomainPage<Brand> returnedBrands = brandUseCase.getAllBrands(page, col, asc);
-        verify(brandPersistencePort).getAllBrands(page, col, asc);
+        when(brandPersistencePort.getAllBrands(paginationData)).thenReturn(mockBrands);
+        DomainPage<Brand> returnedBrands = brandUseCase.getAllBrands(paginationData);
+        verify(brandPersistencePort).getAllBrands(paginationData);
         assertEquals(mockBrands.getContent().size(), returnedBrands.getContent().size());
         assertEquals(mockBrands.getContent().get(0).getId(), returnedBrands.getContent().get(0).getId());
         assertEquals(mockBrands.getContent().get(1).getId(), returnedBrands.getContent().get(1).getId());

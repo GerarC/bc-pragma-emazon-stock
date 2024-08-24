@@ -1,13 +1,16 @@
 package com.emazon.stock.adapters.driving.rest.service.impl;
 
 import com.emazon.stock.adapters.driving.rest.dto.request.BrandRequest;
+import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
 import com.emazon.stock.adapters.driving.rest.mapper.request.BrandRequestMapper;
+import com.emazon.stock.adapters.driving.rest.mapper.request.PaginationRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.response.BrandResponseMapper;
 import com.emazon.stock.domain.api.BrandServicePort;
 import com.emazon.stock.domain.model.Brand;
-import com.emazon.stock.domain.utils.DomainPage;
+import com.emazon.stock.domain.utils.pagination.DomainPage;
+import com.emazon.stock.domain.utils.pagination.PaginationData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,6 +34,9 @@ class BrandServiceImplTest {
     @Mock
     private BrandRequestMapper brandRequestMapper;
 
+    @Mock
+    private PaginationRequestMapper paginationRequestMapper;
+
     @InjectMocks
     private BrandServiceImpl brandService;
 
@@ -52,9 +58,8 @@ class BrandServiceImplTest {
 
     @Test
     void getAllBrands() {
-        int page = 0;
-        String col = "";
-        boolean asc = true;
+        PaginationData paginationData = new PaginationData(0, "", true);
+        PaginationRequest paginationRequest = new PaginationRequest(0, null, true);
         DomainPage<Brand> mockBrands = new DomainPage<>();
         mockBrands.setContent(List.of(
                 new Brand(1L, "nothing", "description", null),
@@ -65,10 +70,14 @@ class BrandServiceImplTest {
                 new BrandResponse(1L, "nothing", "description"),
                 new BrandResponse(2L, "something", "second description")
         ));
-        when(brandServicePort.getAllBrands(page, col, asc)).thenReturn(mockBrands);
+
+        when(brandServicePort.getAllBrands(paginationData)).thenReturn(mockBrands);
         when(brandResponseMapper.toResponsePage(mockBrands)).thenReturn(mockDTOs);
-        ResponsePage<BrandResponse> returnedDTOs = brandService.getAllBrands(page, col, asc);
-        verify(brandServicePort).getAllBrands(page, col, asc);
+        when(paginationRequestMapper.toPaginationData(paginationRequest)).thenReturn(paginationData);
+
+        ResponsePage<BrandResponse> returnedDTOs = brandService.getAllBrands(paginationRequest);
+
+        verify(brandServicePort).getAllBrands(paginationData);
         assertEquals(mockDTOs.getContent().size(), returnedDTOs.getContent().size());
         assertEquals(mockDTOs.getContent().get(0).getId(), returnedDTOs.getContent().get(0).getId());
     }

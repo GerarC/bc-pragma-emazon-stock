@@ -1,14 +1,13 @@
-package com.emazon.stock.domain.spi;
+package com.emazon.stock.domain.api;
 
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.model.Product;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
-import com.emazon.stock.domain.utils.pagination.PaginationData;
 
 import java.util.List;
 
-public interface ProductPersistencePort {
+public interface ProductServicePort {
     void save(Product product);
-    DomainPage<Product> getAllProducts(PaginationData paginationData);
+    DomainPage<Product> getAllProducts(int page, String col, boolean asc);
     List<Category> getProductCategories(Long id);
 }

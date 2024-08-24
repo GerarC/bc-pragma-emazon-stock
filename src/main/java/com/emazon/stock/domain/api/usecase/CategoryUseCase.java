@@ -6,9 +6,13 @@ import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.model.Category;
-import com.emazon.stock.domain.utils.DomainPage;
+import com.emazon.stock.domain.utils.pagination.DomainPage;
 import com.emazon.stock.domain.spi.CategoryPersistencePort;
 import com.emazon.stock.domain.utils.DomainConstants;
+import com.emazon.stock.domain.utils.pagination.PaginationData;
+
+import static com.emazon.stock.domain.utils.ValidationUtils.validateDescription;
+import static com.emazon.stock.domain.utils.ValidationUtils.validateName;
 
 public class CategoryUseCase implements CategoryServicePort {
 
@@ -20,13 +24,8 @@ public class CategoryUseCase implements CategoryServicePort {
 
     @Override
     public void save(Category category) {
-        if(category.getName().trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
-        if(category.getDescription().trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.DESCRIPTION.toString());
-        if(category.getName().trim().length() > DomainConstants.NAME_LENGTH_LIMIT)
-            throw new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.NAME.toString(), String.valueOf(DomainConstants.NAME_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}));
-        if(category.getDescription().trim().length() > DomainConstants.NAME_LENGTH_LIMIT)
-            throw new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.DESCRIPTION.toString(), String.valueOf(DomainConstants.CATEGORY_DESCRIPTION_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}));
-
+        validateName(category.getName(), DomainConstants.NAME_LENGTH_LIMIT);
+        validateDescription(category.getDescription(), DomainConstants.CATEGORY_DESCRIPTION_LENGTH_LIMIT);
         try {
             categoryPersistencePort.getCategoryByName(category.getName());
             throw new EntityAlreadyExistsException(Category.class.getSimpleName(), category.getName());
@@ -41,7 +40,7 @@ public class CategoryUseCase implements CategoryServicePort {
     }
 
     @Override
-    public DomainPage<Category> getAllCategories(int page, String col, boolean asc) {
-        return categoryPersistencePort.getAllCategories(page, col, asc);
+    public DomainPage<Category> getAllCategories(PaginationData paginationData) {
+        return categoryPersistencePort.getAllCategories(paginationData);
     }
 }

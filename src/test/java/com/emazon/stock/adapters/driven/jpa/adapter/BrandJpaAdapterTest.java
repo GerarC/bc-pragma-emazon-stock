@@ -1,11 +1,15 @@
 package com.emazon.stock.adapters.driven.jpa.adapter;
 
 import com.emazon.stock.adapters.driven.jpa.entity.BrandEntity;
+import com.emazon.stock.adapters.driven.jpa.entity.ProductEntity;
 import com.emazon.stock.adapters.driven.jpa.mapper.BrandEntityMapper;
+import com.emazon.stock.adapters.driven.jpa.mapper.PaginationJPAMapper;
 import com.emazon.stock.adapters.driven.jpa.persistence.BrandRepository;
+import com.emazon.stock.adapters.driven.jpa.utils.PaginationJPA;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.model.Brand;
-import com.emazon.stock.domain.utils.DomainPage;
+import com.emazon.stock.domain.utils.pagination.DomainPage;
+import com.emazon.stock.domain.utils.pagination.PaginationData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +37,9 @@ class BrandJpaAdapterTest {
     @Mock
     private BrandEntityMapper brandEntityMapper;
 
+    @Mock
+    private PaginationJPAMapper paginationJPAMapper;
+
     @InjectMocks
     private BrandJpaAdapter brandJpaAdapter;
 
@@ -44,7 +52,7 @@ class BrandJpaAdapterTest {
     @Test
     void save() {
         Brand brand = new Brand(1L, "nothing", "description", null);
-        BrandEntity brandEntity = new BrandEntity(1L, "nothing", "description");
+        BrandEntity brandEntity = new BrandEntity(1L, "nothing", "description", Collections.singletonList(new ProductEntity()));
         when(brandEntityMapper.toEntity(brand)).thenReturn(brandEntity);
         brandJpaAdapter.save(brand);
         verify(brandRepository).save(brandEntity);
@@ -53,7 +61,7 @@ class BrandJpaAdapterTest {
     @Test
     void getBrandByName() {
         Brand brand = new Brand(1L, "nothing", "description", null);
-        BrandEntity brandEntity = new BrandEntity(1L, "nothing", "description");
+        BrandEntity brandEntity = new BrandEntity(1L, "nothing", "description", Collections.singletonList(new ProductEntity()));
         when(brandRepository.findByName("nothing")).thenReturn(Optional.of(brandEntity));
         when(brandRepository.findByName("another")).thenThrow(new EntityNotFoundException("Brand with name another not found"));
         when(brandEntityMapper.toBrand(brandEntity)).thenReturn(brand);
@@ -65,12 +73,12 @@ class BrandJpaAdapterTest {
 
     @Test
     void getAllBrands() {
-        int page = 0;
-        boolean asc = true;
+        PaginationData paginationData = new PaginationData(0, "", true);
+        PaginationJPA paginationJPA = new PaginationJPA(0, "", true);
         Page<BrandEntity> brandEntities = new PageImpl<>(List.of(
-                new BrandEntity(1L, "nothing", "description"),
-                new BrandEntity(2L, "something", "second description")
-        ));
+                new BrandEntity(1L, "nothing", "description", Collections.singletonList(new ProductEntity())),
+                new BrandEntity(2L, "something", "second description", Collections.singletonList(new ProductEntity())
+        )));
         DomainPage<Brand> mockBrands = new DomainPage<>();
         mockBrands.setContent(List.of(
                 new Brand(1L, "nothing", "description", null),
@@ -79,19 +87,19 @@ class BrandJpaAdapterTest {
 
         when(brandRepository.findAll(any(Pageable.class))).thenReturn(brandEntities);
         when(brandEntityMapper.toDomainPage(any())).thenReturn(mockBrands);
-        DomainPage<Brand> returnedBrands = brandJpaAdapter.getAllBrands(page, null, asc);
+        when(paginationJPAMapper.toJPA(paginationData)).thenReturn(paginationJPA);
+        DomainPage<Brand> returnedBrands = brandJpaAdapter.getAllBrands(paginationData);
         assertEquals(mockBrands.getContent().get(0).getName(), returnedBrands.getContent().get(0).getName());
         assertEquals(mockBrands.getContent().get(1).getName(), returnedBrands.getContent().get(1).getName());
     }
 
     @Test
     void getAllBrandsSorted() {
-        int page = 0;
-        String col = "name";
-        boolean asc = true;
+        PaginationData paginationData = new PaginationData(0, "name", true);
+        PaginationJPA paginationJPA = new PaginationJPA(0, "name", true);
         Page<BrandEntity> brandEntities = new PageImpl<>(List.of(
-                new BrandEntity(1L, "nothing", "description"),
-                new BrandEntity(2L, "something", "second description")
+                new BrandEntity(1L, "nothing", "description", Collections.singletonList(new ProductEntity())),
+                new BrandEntity(2L, "something", "second description", Collections.singletonList(new ProductEntity()))
         ));
         DomainPage<Brand> mockBrands = new DomainPage<>();
         mockBrands.setContent(List.of(
@@ -100,31 +108,33 @@ class BrandJpaAdapterTest {
         ));
         when(brandRepository.findAll(any(Pageable.class))).thenReturn(brandEntities);
         when(brandEntityMapper.toDomainPage(any())).thenReturn(mockBrands);
-        DomainPage<Brand> returnedBrands = brandJpaAdapter.getAllBrands(page, col, asc);
+        when(paginationJPAMapper.toJPA(paginationData)).thenReturn(paginationJPA);
+
+        DomainPage<Brand> returnedBrands = brandJpaAdapter.getAllBrands(paginationData);
         assertEquals(mockBrands.getContent().get(0).getName(), returnedBrands.getContent().get(0).getName());
         assertEquals(mockBrands.getContent().get(1).getName(), returnedBrands.getContent().get(1).getName());
     }
 
     @Test
     void getAllBrandsSortedDesc() {
-        int page = 0;
-        String col = "name";
-        boolean asc = false;
+        PaginationData paginationData = new PaginationData(0, "name", false);
+        PaginationJPA paginationJPA = new PaginationJPA(0, "name", false);
         Page<BrandEntity> brandEntities = new PageImpl<>(List.of(
-                new BrandEntity(1L, "nothing", "description"),
-                new BrandEntity(2L, "something", "second description")
+                new BrandEntity(1L, "nothing", "description", Collections.singletonList(new ProductEntity())),
+                new BrandEntity(2L, "something", "second description", Collections.singletonList(new ProductEntity()))
         ));
         DomainPage<Brand> mockBrands = new DomainPage<>();
-        mockBrands.setPage(page);
+        mockBrands.setPage(paginationData.getPage());
         mockBrands.setContent(List.of(
                 new Brand(1L, "nothing", "description", null),
                 new Brand(2L, "something", "second description", null)
         ));
         when(brandRepository.findAll(any(Pageable.class))).thenReturn(brandEntities);
         when(brandEntityMapper.toDomainPage(any())).thenReturn(mockBrands);
-        DomainPage<Brand> returnedBrands = brandJpaAdapter.getAllBrands(page, col, asc);
+        when(paginationJPAMapper.toJPA(paginationData)).thenReturn(paginationJPA);
+        DomainPage<Brand> returnedBrands = brandJpaAdapter.getAllBrands(paginationData);
         assertEquals(mockBrands.getContent().get(0).getName(), returnedBrands.getContent().get(0).getName());
         assertEquals(mockBrands.getContent().get(1).getName(), returnedBrands.getContent().get(1).getName());
-        assertEquals(page, returnedBrands.getPage());
+        assertEquals(paginationData.getPage(), returnedBrands.getPage());
     }
 }

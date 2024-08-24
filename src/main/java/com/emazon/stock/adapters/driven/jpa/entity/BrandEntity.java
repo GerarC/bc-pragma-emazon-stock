@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,4 +29,7 @@ public class BrandEntity {
     @NotNull
     @Column(name = "description", nullable = false, length = 127)
     private String description;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "brand", cascade = CascadeType.ALL)
+    private List<ProductEntity> products;
 }

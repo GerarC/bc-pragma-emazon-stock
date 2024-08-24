@@ -1,5 +1,6 @@
 package com.emazon.stock.adapters.driving.rest.utils;
 
+import com.emazon.stock.adapters.driving.rest.utils.exceptions.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonParser {
@@ -12,7 +13,7 @@ public class JsonParser {
         try {
             return new ObjectMapper().writeValueAsString(obj);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new JsonParseException(e);
         }
     }
 }

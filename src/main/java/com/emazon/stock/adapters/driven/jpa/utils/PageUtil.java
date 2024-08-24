@@ -9,22 +9,24 @@ import org.springframework.data.domain.Sort;
  * A class used only to manage pages in JPA Queries
  */
 public class PageUtil {
+
+    private PageUtil() {
+
+    }
     /**
      * Return a pageable object to use in a query
      *
-     * @param page which page you want to get
-     * @param col what column the page will sort of with
-     * @param asc if the sorting mode is ascendant or not
+     * @param paginationJPA A pagination Jpa object to manage pagination creation
      * @return Return the prepared pageable
      */
-    public static Pageable createPageable(int page, String col, boolean asc) {
+    public static Pageable createPageable(PaginationJPA paginationJPA) {
         Pageable pageable;
-        if (col == null || col.isEmpty()) {
-            pageable = PageRequest.of(page, DomainConstants.PAGE_SIZE);
+        if (paginationJPA.getColumn() == null || paginationJPA.getColumn().isEmpty()) {
+            pageable = PageRequest.of(paginationJPA.getPage(), DomainConstants.PAGE_SIZE);
         } else {
-            Sort.Direction direction = asc ? Sort.Direction.ASC : Sort.Direction.DESC;
-            Sort sort = Sort.by(direction, col);
-            pageable = PageRequest.of(page, DomainConstants.PAGE_SIZE).withSort(sort);
+            Sort.Direction direction = paginationJPA.isAscending() ? Sort.Direction.ASC : Sort.Direction.DESC;
+            Sort sort = Sort.by(direction, paginationJPA.getColumn());
+            pageable = PageRequest.of(paginationJPA.getPage(), DomainConstants.PAGE_SIZE).withSort(sort);
         }
         return pageable;
     }

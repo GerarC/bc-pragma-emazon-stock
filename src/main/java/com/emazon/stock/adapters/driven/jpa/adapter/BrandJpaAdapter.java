@@ -2,12 +2,14 @@ package com.emazon.stock.adapters.driven.jpa.adapter;
 
 import com.emazon.stock.adapters.driven.jpa.entity.BrandEntity;
 import com.emazon.stock.adapters.driven.jpa.mapper.BrandEntityMapper;
+import com.emazon.stock.adapters.driven.jpa.mapper.PaginationJPAMapper;
 import com.emazon.stock.adapters.driven.jpa.persistence.BrandRepository;
 import com.emazon.stock.adapters.driven.jpa.utils.PageUtil;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.model.Brand;
-import com.emazon.stock.domain.utils.DomainPage;
+import com.emazon.stock.domain.utils.pagination.DomainPage;
 import com.emazon.stock.domain.spi.BrandPersistencePort;
+import com.emazon.stock.domain.utils.pagination.PaginationData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ public class BrandJpaAdapter implements BrandPersistencePort {
 
     private final BrandRepository brandRepository;
     private final BrandEntityMapper brandEntityMapper;
+    private final PaginationJPAMapper paginationJPAMapper;
 
     @Override
     public void save(Brand brand) {
@@ -29,8 +32,8 @@ public class BrandJpaAdapter implements BrandPersistencePort {
     }
 
     @Override
-    public DomainPage<Brand> getAllBrands(int page, String col, boolean asc) {
-        Pageable pageable = PageUtil.createPageable(page, col, asc);
+    public DomainPage<Brand> getAllBrands(PaginationData paginationData) {
+        Pageable pageable = PageUtil.createPageable(paginationJPAMapper.toJPA(paginationData));
         Page<BrandEntity> returnBrands = brandRepository.findAll(pageable);
         return brandEntityMapper.toDomainPage(returnBrands);
     }

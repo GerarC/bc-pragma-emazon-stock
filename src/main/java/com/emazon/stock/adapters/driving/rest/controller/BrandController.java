@@ -1,6 +1,7 @@
 package com.emazon.stock.adapters.driving.rest.controller;
 
 import com.emazon.stock.adapters.driving.rest.dto.request.BrandRequest;
+import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
 import com.emazon.stock.adapters.driving.rest.service.BrandService;
@@ -42,13 +43,8 @@ public class BrandController {
     @GetMapping
     public ResponseEntity<ResponsePage<BrandResponse>> getAll(@RequestParam Map<String, String> query) {
         ResponsePage<BrandResponse> foundBrands;
-        String sortBy = null;
-        int page = 0;
-        boolean asc = true;
-        if(query.containsKey("sortBy")) sortBy = query.get("sortBy");
-        if (query.containsKey("page")) page = Integer.parseInt(query.get("page"));
-        if (query.containsKey("asc")) asc = Boolean.parseBoolean(query.get("asc"));
-        foundBrands = brandService.getAllBrands(page, sortBy, asc);
+        PaginationRequest paginationRequest = new PaginationRequest(query);
+        foundBrands = brandService.getAllBrands(paginationRequest);
         return ResponseEntity.ok(foundBrands);
     }
 }

@@ -2,6 +2,7 @@ package com.emazon.stock.configuration;
 
 import com.emazon.stock.adapters.driven.jpa.adapter.BrandJpaAdapter;
 import com.emazon.stock.adapters.driven.jpa.mapper.BrandEntityMapper;
+import com.emazon.stock.adapters.driven.jpa.mapper.PaginationJPAMapper;
 import com.emazon.stock.adapters.driven.jpa.persistence.BrandRepository;
 import com.emazon.stock.domain.api.BrandServicePort;
 import com.emazon.stock.domain.api.CategoryServicePort;
@@ -23,10 +24,11 @@ public class BeanConfiguration {
     private final BrandRepository brandRepository;
     private final CategoryEntityMapper categoryEntityMapper;
     private final BrandEntityMapper brandEntityMapper;
+    private final PaginationJPAMapper paginationJPAMapper;
 
     @Bean
     public CategoryPersistencePort categoryPersistencePort() {
-        return new CategoryJpaAdapter(categoryRepository, categoryEntityMapper);
+        return new CategoryJpaAdapter(categoryRepository, categoryEntityMapper, paginationJPAMapper);
     }
 
     @Bean
@@ -36,7 +38,7 @@ public class BeanConfiguration {
 
     @Bean
     public BrandPersistencePort brandPersistencePort() {
-        return new BrandJpaAdapter(brandRepository, brandEntityMapper);
+        return new BrandJpaAdapter(brandRepository, brandEntityMapper, paginationJPAMapper);
     }
 
     @Bean

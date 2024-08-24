@@ -3,7 +3,7 @@ package com.emazon.stock.adapters.driven.jpa.mapper;
 
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.adapters.driven.jpa.entity.CategoryEntity;
-import com.emazon.stock.domain.utils.DomainPage;
+import com.emazon.stock.domain.utils.pagination.DomainPage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

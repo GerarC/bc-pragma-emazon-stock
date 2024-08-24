@@ -1,4 +1,4 @@
-package com.emazon.stock.domain.utils;
+package com.emazon.stock.domain.utils.pagination;
 
 
 import java.util.List;

@@ -5,8 +5,9 @@ import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.model.Category;
-import com.emazon.stock.domain.utils.DomainPage;
+import com.emazon.stock.domain.utils.pagination.DomainPage;
 import com.emazon.stock.domain.spi.CategoryPersistencePort;
+import com.emazon.stock.domain.utils.pagination.PaginationData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -91,17 +92,15 @@ class CategoryUseCaseTest {
 
     @Test
     void getAllCategories() {
-        int page = 0;
-        String col = "";
-        boolean asc = true;
+        PaginationData paginationData = new PaginationData(0, null, true);
         DomainPage<Category> mockCategories = new DomainPage<>();
         mockCategories.setContent(List.of(
                 new Category(1L, "nothing", "description", null),
                 new Category(2L, "something", "second description", null)
         ));
-        when(categoryPersistencePort.getAllCategories(page, col, asc)).thenReturn(mockCategories);
-        DomainPage<Category> returnedCategories = categoryUseCase.getAllCategories(page, col, asc);
-        verify(categoryPersistencePort).getAllCategories(page, col, asc);
+        when(categoryPersistencePort.getAllCategories(paginationData)).thenReturn(mockCategories);
+        DomainPage<Category> returnedCategories = categoryUseCase.getAllCategories(paginationData);
+        verify(categoryPersistencePort).getAllCategories(paginationData);
         assertEquals(mockCategories.getContent().size(), returnedCategories.getContent().size());
         assertEquals(mockCategories.getContent().get(0).getId(), returnedCategories.getContent().get(0).getId());
         assertEquals(mockCategories.getContent().get(1).getId(), returnedCategories.getContent().get(1).getId());
