@@ -3,7 +3,7 @@ package com.emazon.stock.adapters.driving.rest.service.impl;
 import com.emazon.stock.adapters.driving.rest.dto.request.BrandRequest;
 import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.mapper.request.BrandRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.request.PaginationRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.response.BrandResponseMapper;
@@ -65,7 +65,7 @@ class BrandServiceImplTest {
                 new Brand(1L, "nothing", "description", null),
                 new Brand(2L, "something", "second description", null)
         ));
-        ResponsePage<BrandResponse> mockDTOs = new ResponsePage<>();
+        PageResponse<BrandResponse> mockDTOs = new PageResponse<>();
         mockDTOs.setContent(List.of(
                 new BrandResponse(1L, "nothing", "description"),
                 new BrandResponse(2L, "something", "second description")
@@ -75,7 +75,7 @@ class BrandServiceImplTest {
         when(brandResponseMapper.toResponsePage(mockBrands)).thenReturn(mockDTOs);
         when(paginationRequestMapper.toPaginationData(paginationRequest)).thenReturn(paginationData);
 
-        ResponsePage<BrandResponse> returnedDTOs = brandService.getAllBrands(paginationRequest);
+        PageResponse<BrandResponse> returnedDTOs = brandService.getAllBrands(paginationRequest);
 
         verify(brandServicePort).getAllBrands(paginationData);
         assertEquals(mockDTOs.getContent().size(), returnedDTOs.getContent().size());

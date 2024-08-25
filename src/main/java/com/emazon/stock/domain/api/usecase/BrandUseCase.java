@@ -2,9 +2,7 @@ package com.emazon.stock.domain.api.usecase;
 
 import com.emazon.stock.domain.api.BrandServicePort;
 import com.emazon.stock.domain.exceptions.EntityAlreadyExistsException;
-import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
-import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.model.Brand;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
 import com.emazon.stock.domain.spi.BrandPersistencePort;

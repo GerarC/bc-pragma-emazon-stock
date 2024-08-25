@@ -2,7 +2,7 @@ package com.emazon.stock.adapters.driving.rest.mapper.response;
 
 
 import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.domain.model.Brand;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
 import org.mapstruct.Mapper;
@@ -19,5 +19,5 @@ public interface BrandResponseMapper {
 
     List<BrandResponse> toResponses(List<Brand> brands);
 
-    ResponsePage<BrandResponse> toResponsePage(DomainPage<Brand> brands);
+    PageResponse<BrandResponse> toResponsePage(DomainPage<Brand> brands);
 }

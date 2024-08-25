@@ -54,14 +54,14 @@ class BrandUseCaseTest {
 
     @Test
     void saveNotName() {
-        Brand brand = new Brand(1L, "", "description", null);
+        Brand brand = new Brand(1L, null, "description", null);
         assertThrows(EmptyFieldException.class, () -> brandUseCase.save(brand));
         verify(brandPersistencePort, times(0)).save(brand);
     }
 
     @Test
     void saveNotDescription() {
-        Brand brand = new Brand(1L, "name", "", null);
+        Brand brand = new Brand(1L, "name", null, null);
         assertThrows(EmptyFieldException.class, () -> brandUseCase.save(brand));
         verify(brandPersistencePort, times(0)).save(brand);
     }

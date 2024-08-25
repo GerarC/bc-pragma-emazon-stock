@@ -3,7 +3,7 @@ package com.emazon.stock.adapters.driving.rest.service.impl;
 import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
 import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.mapper.request.CategoryRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.request.PaginationRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.response.CategoryResponseMapper;
@@ -82,7 +82,7 @@ class CategoryServiceImplTest {
                 new Category(1L, "nothing", "description", null),
                 new Category(2L, "something", "second description", null)
         ));
-        ResponsePage<CategoryResponse> mockDTOs = new ResponsePage<>();
+        PageResponse<CategoryResponse> mockDTOs = new PageResponse<>();
         mockDTOs.setContent(List.of(
                 new CategoryResponse(1L, "nothing", "description"),
                 new CategoryResponse(2L, "something", "second description")
@@ -92,7 +92,7 @@ class CategoryServiceImplTest {
         when(categoryResponseMapper.toResponsePage(mockCategories)).thenReturn(mockDTOs);
         when(paginationRequestMapper.toPaginationData(paginationRequest)).thenReturn(paginationData);
 
-        ResponsePage<CategoryResponse> returnedDTOs = categoryService.getAllCategories(paginationRequest);
+        PageResponse<CategoryResponse> returnedDTOs = categoryService.getAllCategories(paginationRequest);
         verify(categoryServicePort).getAllCategories(paginationData);
         assertEquals(mockDTOs.getContent().size(), returnedDTOs.getContent().size());
         assertEquals(mockDTOs.getContent().get(0).getId(), returnedDTOs.getContent().get(0).getId());

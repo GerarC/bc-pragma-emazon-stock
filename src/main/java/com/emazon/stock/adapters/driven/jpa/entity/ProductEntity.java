@@ -1,6 +1,7 @@
 package com.emazon.stock.adapters.driven.jpa.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,16 +24,20 @@ public class ProductEntity {
     @Column(name = "product_id")
     private Long id;
 
+    @NotNull
     @Column(name = "name", nullable = false)
     private String name;
 
 
+    @NotNull
     @Column(name = "description", nullable = false)
     private String description;
 
+    @NotNull
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
+    @NotNull
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
@@ -42,10 +47,11 @@ public class ProductEntity {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
+    @NotNull
     @Size(max = 3, min = 1)
     private Set<CategoryEntity> categories;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name="brand_id")
     private BrandEntity brand;
 }

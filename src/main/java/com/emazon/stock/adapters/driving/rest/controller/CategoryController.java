@@ -3,7 +3,7 @@ package com.emazon.stock.adapters.driving.rest.controller;
 import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
 import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -57,8 +57,8 @@ public class CategoryController {
             @ApiResponse(responseCode = "200", description = "A list of the found categories", content = @Content),
     })
     @GetMapping
-    public ResponseEntity<ResponsePage<CategoryResponse>> getAll(@RequestParam Map<String, String> query) {
-        ResponsePage<CategoryResponse> foundCategories;
+    public ResponseEntity<PageResponse<CategoryResponse>> getAll(@RequestParam Map<String, String> query) {
+        PageResponse<CategoryResponse> foundCategories;
         PaginationRequest paginationRequest = new PaginationRequest(query);
         foundCategories = categoryService.getAllCategories(paginationRequest);
         return ResponseEntity.ok(foundCategories);

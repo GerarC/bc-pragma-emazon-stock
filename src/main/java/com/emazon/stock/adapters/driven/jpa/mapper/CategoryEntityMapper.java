@@ -15,8 +15,10 @@ import java.util.List;
         unmappedSourcePolicy = ReportingPolicy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CategoryEntityMapper {
+    @Mapping(target = "products", ignore = true)
     CategoryEntity toEntity(Category category);
 
+    @Mapping(target = "products", ignore = true)
     Category toCategory(CategoryEntity categoryEntity);
 
     List<Category> toCategories(List<CategoryEntity> categoryEntities);

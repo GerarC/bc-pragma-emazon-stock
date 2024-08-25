@@ -50,11 +50,11 @@ tasks.named('test') {
 }
 
 def jacocoExclude = [
-		'**/configuration/**/*',
-		'**/mapper/*',
-		'**/model/*',
-		'**/entity/*',
-		'**/dto/*',
+		'**/configuration/**/*.class',
+		'**/mapper/*.class',
+		'**/model/*.class',
+		'**/entity/*.class',
+		'**/dto/*.class',
 ]
 
 test {

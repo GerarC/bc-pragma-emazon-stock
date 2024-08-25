@@ -3,7 +3,7 @@ package com.emazon.stock.adapters.driving.rest.controller;
 import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
 import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.service.CategoryService;
 import com.emazon.stock.domain.exceptions.EntityAlreadyExistsException;
 import com.emazon.stock.domain.exceptions.EmptyFieldException;
@@ -124,7 +124,7 @@ class CategoryControllerTest {
     @Test
     void getAll() throws Exception {
         PaginationRequest paginationRequest = new PaginationRequest(0, null, true);
-        ResponsePage<CategoryResponse> mockDTOs = new ResponsePage<>();
+        PageResponse<CategoryResponse> mockDTOs = new PageResponse<>();
         mockDTOs.setContent(List.of(
                 new CategoryResponse(1L, "nothing", "description"),
                 new CategoryResponse(2L, "something", "second description")
@@ -138,7 +138,7 @@ class CategoryControllerTest {
     @Test
     void getAllWithParams() throws Exception {
         PaginationRequest paginationRequest = new PaginationRequest(0, "name", true);
-        ResponsePage<CategoryResponse> mockDTOs = new ResponsePage<>();
+        PageResponse<CategoryResponse> mockDTOs = new PageResponse<>();
         mockDTOs.setContent(List.of(
                 new CategoryResponse(1L, "nothing", "description"),
                 new CategoryResponse(2L, "something", "second description")

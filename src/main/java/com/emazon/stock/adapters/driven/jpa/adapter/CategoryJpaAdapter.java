@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import static com.emazon.stock.adapters.driven.jpa.utils.PageUtil.createPageable;
-
 @RequiredArgsConstructor
 public class CategoryJpaAdapter implements CategoryPersistencePort {
 
@@ -39,7 +37,7 @@ public class CategoryJpaAdapter implements CategoryPersistencePort {
 
     @Override
     public DomainPage<Category> getAllCategories(PaginationData paginationData) {
-        Pageable pageable = createPageable(paginationJPAMapper.toJPA(paginationData));
+        Pageable pageable = paginationJPAMapper.toJPA(paginationData).createPageable();
         Page<CategoryEntity> returnedCategories = categoryRepository.findAll(pageable);
         return categoryEntityMapper.toDomainPage(returnedCategories);
     }

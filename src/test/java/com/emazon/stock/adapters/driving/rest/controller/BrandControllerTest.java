@@ -3,7 +3,7 @@ package com.emazon.stock.adapters.driving.rest.controller;
 import com.emazon.stock.adapters.driving.rest.dto.request.BrandRequest;
 import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.service.BrandService;
 import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityAlreadyExistsException;
@@ -24,7 +24,6 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BrandController.class)
@@ -111,7 +110,7 @@ class BrandControllerTest {
     @Test
     void getAll() throws Exception {
         PaginationRequest paginationRequest = new PaginationRequest(0, null, true);
-        ResponsePage<BrandResponse> mockDTOs = new ResponsePage<>();
+        PageResponse<BrandResponse> mockDTOs = new PageResponse<>();
         mockDTOs.setContent(List.of(
                 new BrandResponse(1L, "nothing", "description"),
                 new BrandResponse(2L, "something", "second description")
@@ -124,7 +123,7 @@ class BrandControllerTest {
     @Test
     void getAllWithParams() throws Exception {
         PaginationRequest paginationRequest = new PaginationRequest(0, "name", true);
-        ResponsePage<BrandResponse> mockDTOs = new ResponsePage<>();
+        PageResponse<BrandResponse> mockDTOs = new PageResponse<>();
         mockDTOs.setContent(List.of(
                 new BrandResponse(1L, "nothing", "description"),
                 new BrandResponse(2L, "something", "second description")

@@ -3,7 +3,7 @@ package com.emazon.stock.adapters.driving.rest.controller;
 import com.emazon.stock.adapters.driving.rest.dto.request.BrandRequest;
 import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.service.BrandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -41,8 +41,8 @@ public class BrandController {
             @ApiResponse(responseCode = "200", description = "A list of the found brands", content = @Content),
     })
     @GetMapping
-    public ResponseEntity<ResponsePage<BrandResponse>> getAll(@RequestParam Map<String, String> query) {
-        ResponsePage<BrandResponse> foundBrands;
+    public ResponseEntity<PageResponse<BrandResponse>> getAll(@RequestParam Map<String, String> query) {
+        PageResponse<BrandResponse> foundBrands;
         PaginationRequest paginationRequest = new PaginationRequest(query);
         foundBrands = brandService.getAllBrands(paginationRequest);
         return ResponseEntity.ok(foundBrands);

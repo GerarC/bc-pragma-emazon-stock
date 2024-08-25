@@ -1,5 +1,6 @@
 package com.emazon.stock.adapters.driven.jpa.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -31,5 +32,6 @@ public class CategoryEntity {
     private String description;
 
     @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
     private Set<ProductEntity> products;
 }

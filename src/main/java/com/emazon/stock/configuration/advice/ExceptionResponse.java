@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExceptionResponse {
-    private HttpStatusCode statusCode;
+    private Integer statusCode;
+    private HttpStatusCode status;
     private String message;
     private LocalDateTime timestamp;
 }

@@ -3,7 +3,7 @@ package com.emazon.stock.adapters.driving.rest.service.impl;
 import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
 import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.mapper.request.CategoryRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.request.PaginationRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.response.CategoryResponseMapper;
@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ResponsePage<CategoryResponse> getAllCategories(PaginationRequest paginationRequest) {
+    public PageResponse<CategoryResponse> getAllCategories(PaginationRequest paginationRequest) {
         return categoryResponseMapper.toResponsePage(categoryServicePort.getAllCategories(paginationRequestMapper.toPaginationData(paginationRequest)));
     }
 }

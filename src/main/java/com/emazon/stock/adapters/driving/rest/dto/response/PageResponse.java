@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ResponsePage<T> {
+public class PageResponse<T> {
     Integer page;
     Integer pageSize;
     Integer totalPages;

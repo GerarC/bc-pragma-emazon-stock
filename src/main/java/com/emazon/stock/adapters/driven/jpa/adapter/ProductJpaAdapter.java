@@ -4,7 +4,6 @@ import com.emazon.stock.adapters.driven.jpa.entity.ProductEntity;
 import com.emazon.stock.adapters.driven.jpa.mapper.ProductEntityMapper;
 import com.emazon.stock.adapters.driven.jpa.mapper.PaginationJPAMapper;
 import com.emazon.stock.adapters.driven.jpa.persistence.ProductRepository;
-import com.emazon.stock.adapters.driven.jpa.utils.PageUtil;
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.model.Product;
 import com.emazon.stock.domain.spi.ProductPersistencePort;
@@ -30,7 +29,7 @@ public class ProductJpaAdapter implements ProductPersistencePort {
 
     @Override
     public DomainPage<Product> getAllProducts(PaginationData paginationData) {
-        Pageable pageable = PageUtil.createPageable(paginationJPAMapper.toJPA(paginationData));
+        Pageable pageable = paginationJPAMapper.toJPA(paginationData).createPageable();
         Page<ProductEntity> returnProducts = productRepository.findAll(pageable);
         return productEntityMapper.toDomainPage(returnProducts);
     }

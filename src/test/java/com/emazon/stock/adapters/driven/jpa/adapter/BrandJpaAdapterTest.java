@@ -137,4 +137,22 @@ class BrandJpaAdapterTest {
         assertEquals(mockBrands.getContent().get(1).getName(), returnedBrands.getContent().get(1).getName());
         assertEquals(paginationData.getPage(), returnedBrands.getPage());
     }
+
+    @Test
+    void getBrand() {
+        Brand brand = new Brand(1L, "nothing", "description", null);
+        BrandEntity brandEntity = new BrandEntity(1L, "nothing", "description", null);
+        when(brandRepository.findById(1L)).thenReturn(Optional.of(brandEntity));
+        when(brandRepository.findById(2L)).thenThrow(new EntityNotFoundException("Brand with id 2 not found"));
+        when(brandEntityMapper.toBrand(brandEntity)).thenReturn(brand);
+        Brand brandReturned = brandJpaAdapter.getBrand(1L);
+        verify(brandRepository).findById(1L);
+        assertEquals(brand, brandReturned);
+        try {
+            brandJpaAdapter.getBrand(2L);
+            assert (false);
+        } catch (EntityNotFoundException e) {
+            assert (true);
+        }
+    }
 }

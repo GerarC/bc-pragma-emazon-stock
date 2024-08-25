@@ -2,7 +2,7 @@ package com.emazon.stock.adapters.driving.rest.mapper.response;
 
 
 import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.ResponsePage;
+import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
 import org.mapstruct.Mapper;
@@ -19,5 +19,5 @@ public interface CategoryResponseMapper {
 
     List<CategoryResponse> toResponses(List<Category> categories);
 
-    ResponsePage<CategoryResponse> toResponsePage(DomainPage<Category> categories);
+    PageResponse<CategoryResponse> toResponsePage(DomainPage<Category> categories);
 }

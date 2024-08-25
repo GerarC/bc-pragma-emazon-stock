@@ -1,5 +1,6 @@
 package com.emazon.stock.adapters.driven.jpa.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class BrandEntity {
     @Column(name = "description", nullable = false, length = 127)
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "brand", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "brand", cascade = CascadeType.MERGE)
+    @JsonIgnore
     private List<ProductEntity> products;
 }

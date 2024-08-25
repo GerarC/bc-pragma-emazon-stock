@@ -1,5 +1,6 @@
 package com.emazon.stock.adapters.driving.rest.dto.request;
 
+import com.emazon.stock.domain.utils.DomainConstants;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -11,11 +12,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryRequest {
-    @NotNull(message = "Name cannot be null")
+    @NotNull(message = DomainConstants.FIELD_NAME_NULL_MESSAGE)
     @Size(max=50, message = "Name must be shorter than 50 chars")
     private String name;
 
-    @NotNull(message = "Description cannot be null")
+    @NotNull(message = DomainConstants.FIELD_DESCRIPTION_NULL_MESSAGE)
     @Size(max=90, message = "Description must be shorter than 90 chars")
     private String description;
 }
