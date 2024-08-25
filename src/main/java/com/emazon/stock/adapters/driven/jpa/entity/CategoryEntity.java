@@ -1,11 +1,14 @@
 package com.emazon.stock.adapters.driven.jpa.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -27,4 +30,8 @@ public class CategoryEntity {
     @NotNull
     @Column(name = "description", nullable = false, length = 127)
     private String description;
+
+    @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
+    private Set<ProductEntity> products;
 }
