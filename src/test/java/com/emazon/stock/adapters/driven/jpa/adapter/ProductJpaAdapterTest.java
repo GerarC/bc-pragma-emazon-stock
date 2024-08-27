@@ -3,10 +3,12 @@ package com.emazon.stock.adapters.driven.jpa.adapter;
 import com.emazon.stock.adapters.driven.jpa.entity.BrandEntity;
 import com.emazon.stock.adapters.driven.jpa.entity.CategoryEntity;
 import com.emazon.stock.adapters.driven.jpa.entity.ProductEntity;
+import com.emazon.stock.adapters.driven.jpa.mapper.CategoryEntityMapper;
 import com.emazon.stock.adapters.driven.jpa.mapper.PaginationJPAMapper;
 import com.emazon.stock.adapters.driven.jpa.mapper.ProductEntityMapper;
 import com.emazon.stock.adapters.driven.jpa.persistence.ProductRepository;
 import com.emazon.stock.adapters.driven.jpa.utils.PaginationJPA;
+import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.model.Brand;
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.model.Product;
@@ -24,8 +26,10 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class ProductJpaAdapterTest {
@@ -39,6 +43,9 @@ class ProductJpaAdapterTest {
 
     @Mock
     private PaginationJPAMapper paginationJPAMapper;
+
+    @Mock
+    private CategoryEntityMapper categoryEntityMapper;
 
     @InjectMocks
     private ProductJpaAdapter productJpaAdapter;
@@ -80,6 +87,27 @@ class ProductJpaAdapterTest {
 
     @Test
     void getProductCategories() {
-        // TODO: UH6
+        List<Category> categories = List.of(new Category(1L, "nothing", "nothing", null));
+
+        CategoryEntity categoryEntity = new CategoryEntity(1L, "nothing", "nothing", null);
+        BrandEntity brandEntity = new BrandEntity(1L, "nothing", "nothing", null);
+        ProductEntity productEntity = new ProductEntity(1L, "burger", "a burger", BigDecimal.valueOf(0), 1L, Collections.singleton(categoryEntity),  brandEntity);
+
+        when(categoryEntityMapper.toCategories(anyList())).thenReturn(categories);
+        when(productRepository.findById((1L))).thenReturn(Optional.of(productEntity));
+
+        List<Category> returnedCategories = productJpaAdapter.getProductCategories(1L);
+        verify(productRepository).findById((1L));
+        assertEquals(categories.size(), returnedCategories.size());
+        assertEquals(categories.get(0).getId(), returnedCategories.get(0).getId());
+    }
+
+    @Test
+    void getProductCategoriesError() {
+        when(productRepository.findById((1L))).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> productJpaAdapter.getProductCategories(1L));
+        verify(productRepository).findById((1L));
+        verify(categoryEntityMapper, times(0)).toCategories(anyList());
     }
 }

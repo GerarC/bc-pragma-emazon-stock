@@ -54,7 +54,7 @@ public class CategoryController {
 
     @Operation(summary = "Gets all categories, they are paged, if you want it, you can sor by name or description")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "A list of the found categories", content = @Content),
+            @ApiResponse(responseCode = "200", description = "A list of the found categories", content = @Content(mediaType = "application/json")),
     })
     @GetMapping
     public ResponseEntity<PageResponse<CategoryResponse>> getAll(@RequestParam Map<String, String> query) {

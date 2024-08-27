@@ -56,7 +56,7 @@ public class BeanConfiguration {
 
     @Bean
     public ProductPersistencePort productPersistencePort() {
-        return new ProductJpaAdapter(productRepository, productEntityMapper, paginationJPAMapper);
+        return new ProductJpaAdapter(productRepository, productEntityMapper, categoryEntityMapper, paginationJPAMapper);
     }
 
     @Bean

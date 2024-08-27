@@ -150,5 +150,10 @@ class ProductUseCaseTest {
 
     @Test
     void getProductCategories() {
+        List<Category> categories = List.of(new Category(1L, "nothing", "nothing", null));
+        when(productPersistencePort.getProductCategories(1L)).thenReturn(categories);
+        List<Category> returnedCategories = productUseCase.getProductCategories(1L);
+        assertEquals(categories.size(), returnedCategories.size());
+        assertEquals(categories.get(0).getId(), returnedCategories.get(0).getId());
     }
 }

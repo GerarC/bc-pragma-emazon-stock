@@ -130,8 +130,8 @@ class CategoryControllerTest {
                 new CategoryResponse(2L, "something", "second description")
         ));
         when(categoryService.getAllCategories(paginationRequest)).thenReturn(mockDTOs);
-        // TODO: review why make a JSON of request returns error
         this.mockMvc.perform(get("/categories"))
+                // TODO: review why make a JSON of request returns error
                 .andExpect(status().isOk());
     }
 

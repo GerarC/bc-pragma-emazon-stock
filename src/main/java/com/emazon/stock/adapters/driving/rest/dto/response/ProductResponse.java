@@ -1,7 +1,5 @@
 package com.emazon.stock.adapters.driving.rest.dto.response;
 
-import com.emazon.stock.domain.model.Brand;
-import com.emazon.stock.domain.model.Category;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -20,6 +18,6 @@ public class ProductResponse {
     private String description;
     private BigDecimal price;
     private Long quantity;
-    private List<Category> categories;
-    private Brand brand;
+    private List<String> categories;
+    private String brand;
 }
