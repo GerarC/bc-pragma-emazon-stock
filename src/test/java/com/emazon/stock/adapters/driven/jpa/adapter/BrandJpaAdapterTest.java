@@ -73,8 +73,8 @@ class BrandJpaAdapterTest {
 
     @Test
     void getAllBrands() {
-        PaginationData paginationData = new PaginationData(0, "", true);
-        PaginationJPA paginationJPA = new PaginationJPA(0, "", true);
+        PaginationData paginationData = new PaginationData(0, "", true, 10);
+        PaginationJPA paginationJPA = new PaginationJPA(0, "", true, 10);
         Page<BrandEntity> brandEntities = new PageImpl<>(List.of(
                 new BrandEntity(1L, "nothing", "description", Collections.singletonList(new ProductEntity())),
                 new BrandEntity(2L, "something", "second description", Collections.singletonList(new ProductEntity())
@@ -95,8 +95,8 @@ class BrandJpaAdapterTest {
 
     @Test
     void getAllBrandsSorted() {
-        PaginationData paginationData = new PaginationData(0, "name", true);
-        PaginationJPA paginationJPA = new PaginationJPA(0, "name", true);
+        PaginationData paginationData = new PaginationData(0, "name", true, 10);
+        PaginationJPA paginationJPA = new PaginationJPA(0, "name", true, 10);
         Page<BrandEntity> brandEntities = new PageImpl<>(List.of(
                 new BrandEntity(1L, "nothing", "description", Collections.singletonList(new ProductEntity())),
                 new BrandEntity(2L, "something", "second description", Collections.singletonList(new ProductEntity()))
@@ -117,8 +117,8 @@ class BrandJpaAdapterTest {
 
     @Test
     void getAllBrandsSortedDesc() {
-        PaginationData paginationData = new PaginationData(0, "name", false);
-        PaginationJPA paginationJPA = new PaginationJPA(0, "name", false);
+        PaginationData paginationData = new PaginationData(0, "name", false, 10);
+        PaginationJPA paginationJPA = new PaginationJPA(0, "name", false, 10);
         Page<BrandEntity> brandEntities = new PageImpl<>(List.of(
                 new BrandEntity(1L, "nothing", "description", Collections.singletonList(new ProductEntity())),
                 new BrandEntity(2L, "something", "second description", Collections.singletonList(new ProductEntity()))

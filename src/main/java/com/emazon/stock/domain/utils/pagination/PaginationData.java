@@ -1,24 +1,26 @@
 package com.emazon.stock.domain.utils.pagination;
 
 public class PaginationData {
-    private int page;
+    private Integer page;
     private String column;
     private boolean ascending;
+    private Integer pageSize;
 
-    public PaginationData(int page, String column, boolean ascending) {
+    public PaginationData(Integer page, String column, boolean ascending, Integer pageSize) {
         this.page = page;
         this.column = column;
         this.ascending = ascending;
+        this.pageSize = pageSize;
     }
 
     public PaginationData() {
     }
 
-    public int getPage() {
+    public Integer getPage() {
         return page;
     }
 
-    public void setPage(int page) {
+    public void setPage(Integer page) {
         this.page = page;
     }
 
@@ -36,5 +38,13 @@ public class PaginationData {
 
     public void setAscending(boolean ascending) {
         this.ascending = ascending;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }

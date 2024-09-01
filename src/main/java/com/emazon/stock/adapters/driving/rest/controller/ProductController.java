@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class ProductController {
             @ApiResponse(responseCode = "400", description = "Product description is too long", content = @Content)
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest product) {
         productService.save(product);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -47,6 +49,7 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "A page of the found categories", content = @Content(mediaType = "application/json", schema =  @Schema(implementation = PageResponse.class))),
     })
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")
     public ResponseEntity<PageResponse<ProductResponse>> getAllProducts(@RequestParam Map<String, String> query) {
         PaginationRequest paginationRequest = new PaginationRequest(query);
         return ResponseEntity.ok(productService.getAllProducts(paginationRequest));
@@ -64,6 +67,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
     })
     @GetMapping("/{id}/categories")
+    @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")
     public ResponseEntity<List<ProductCategoryResponse>> getProductCategories(@PathVariable Long id){
         return ResponseEntity.ok(productService.getProductCategories(id));
     }

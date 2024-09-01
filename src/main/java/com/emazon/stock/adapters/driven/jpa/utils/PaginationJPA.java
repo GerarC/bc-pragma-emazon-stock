@@ -12,9 +12,10 @@ import org.springframework.data.domain.Sort;
 @AllArgsConstructor
 @Builder
 public class PaginationJPA {
-    private int page;
+    private Integer page;
     private String column;
     private boolean ascending;
+    private Integer pageSize;
 
     /**
      * Return a pageable object to use in a query, the options are the attributes of the PaginationJPA instance
@@ -24,11 +25,11 @@ public class PaginationJPA {
     public Pageable createPageable() {
         Pageable pageable;
         if (this.getColumn() == null || this.getColumn().isEmpty()) {
-            pageable = PageRequest.of(this.getPage(), DomainConstants.PAGE_SIZE);
+            pageable = PageRequest.of(this.getPage(), this.pageSize);
         } else {
             Sort.Direction direction = this.isAscending() ? Sort.Direction.ASC : Sort.Direction.DESC;
             Sort sort = Sort.by(direction, this.getColumn());
-            pageable = PageRequest.of(this.getPage(), DomainConstants.PAGE_SIZE).withSort(sort);
+            pageable = PageRequest.of(this.getPage(), this.pageSize).withSort(sort);
         }
         return pageable;
     }

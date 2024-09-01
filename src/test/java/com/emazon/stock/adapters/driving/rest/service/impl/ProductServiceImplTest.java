@@ -66,8 +66,8 @@ class ProductServiceImplTest {
 
     @Test
     void getAllBrands() {
-        PaginationData paginationData = new PaginationData(0, "", true);
-        PaginationRequest paginationRequest = new PaginationRequest(0, null, true);
+        PaginationData paginationData = new PaginationData(0, "", true, 10);
+        PaginationRequest paginationRequest = new PaginationRequest(0, null, true, 10);
         DomainPage<Product> mockPage = getProductDomainPage();
         PageResponse<ProductResponse> mockDTOs = new PageResponse<>();
         mockDTOs.setContent(List.of(

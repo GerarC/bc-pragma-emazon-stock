@@ -92,7 +92,7 @@ class CategoryUseCaseTest {
 
     @Test
     void getAllCategories() {
-        PaginationData paginationData = new PaginationData(0, null, true);
+        PaginationData paginationData = new PaginationData(0, null, true, 10);
         DomainPage<Category> mockCategories = new DomainPage<>();
         mockCategories.setContent(List.of(
                 new Category(1L, "nothing", "description", null),

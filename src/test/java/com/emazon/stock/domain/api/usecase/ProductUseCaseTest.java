@@ -133,7 +133,7 @@ class ProductUseCaseTest {
 
     @Test
     void getAllProducts() {
-        PaginationData paginationData = new PaginationData(0, null, true);
+        PaginationData paginationData = new PaginationData(0, null, true, 10);
         DomainPage<Product> mockProducts = new DomainPage<>();
         mockProducts.setContent(List.of(
                 new Product(1L, "burger", "a burger", BigDecimal.valueOf(0), 1L, Collections.singletonList(new Category()), new Brand()),

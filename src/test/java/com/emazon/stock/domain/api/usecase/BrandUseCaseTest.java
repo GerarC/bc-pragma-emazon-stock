@@ -85,7 +85,7 @@ class BrandUseCaseTest {
 
     @Test
     void getAllBrands() {
-        PaginationData paginationData = new PaginationData(0, null, true);
+        PaginationData paginationData = new PaginationData(0, null, true, 10);
         DomainPage<Brand> mockBrands = new DomainPage<>();
         mockBrands.setContent(List.of(
                 new Brand(1L, "nothing", "description", null),

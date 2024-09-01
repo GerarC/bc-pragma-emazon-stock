@@ -75,8 +75,8 @@ class CategoryServiceImplTest {
 
     @Test
     void getAllCategories() {
-        PaginationData paginationData = new PaginationData(0, "", true);
-        PaginationRequest paginationRequest = new PaginationRequest(0, null, true);
+        PaginationData paginationData = new PaginationData(0, "", true, 10);
+        PaginationRequest paginationRequest = new PaginationRequest(0, null, true, 10);
         DomainPage<Category> mockCategories = new DomainPage<>();
         mockCategories.setContent(List.of(
                 new Category(1L, "nothing", "description", null),

@@ -12,12 +12,16 @@ import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.utils.DomainConstants;
 import com.emazon.stock.adapters.driving.rest.utils.JsonParser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -32,13 +36,20 @@ class CategoryControllerTest {
 
 
     MockMvc mockMvc;
+    private final WebApplicationContext webApplicationContext;
 
     @MockBean
     private CategoryService categoryService;
 
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        MockitoAnnotations.openMocks(this);
+    }
+
     @Autowired
-    CategoryControllerTest(MockMvc mockMvc) {
-        this.mockMvc = mockMvc;
+    public CategoryControllerTest(WebApplicationContext webApplicationContext) {
+        this.webApplicationContext = webApplicationContext;
     }
 
     @Test
@@ -123,7 +134,7 @@ class CategoryControllerTest {
 
     @Test
     void getAll() throws Exception {
-        PaginationRequest paginationRequest = new PaginationRequest(0, null, true);
+        PaginationRequest paginationRequest = new PaginationRequest(0, null, true, 10);
         PageResponse<CategoryResponse> mockDTOs = new PageResponse<>();
         mockDTOs.setContent(List.of(
                 new CategoryResponse(1L, "nothing", "description"),
@@ -131,13 +142,12 @@ class CategoryControllerTest {
         ));
         when(categoryService.getAllCategories(paginationRequest)).thenReturn(mockDTOs);
         this.mockMvc.perform(get("/categories"))
-                // TODO: review why make a JSON of request returns error
                 .andExpect(status().isOk());
     }
 
     @Test
     void getAllWithParams() throws Exception {
-        PaginationRequest paginationRequest = new PaginationRequest(0, "name", true);
+        PaginationRequest paginationRequest = new PaginationRequest(0, "name", true, 10);
         PageResponse<CategoryResponse> mockDTOs = new PageResponse<>();
         mockDTOs.setContent(List.of(
                 new CategoryResponse(1L, "nothing", "description"),
@@ -147,6 +157,7 @@ class CategoryControllerTest {
         this.mockMvc.perform(get("/categories")
                         .queryParam("page", "0")
                         .queryParam("sortBy", "name")
+                        .queryParam("pageSize", "10")
                         .queryParam("asc", "true"))
                 .andExpect(status().isOk());
     }

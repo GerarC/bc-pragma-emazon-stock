@@ -66,8 +66,8 @@ class ProductJpaAdapterTest {
 
     @Test
     void getAllProducts() {
-        PaginationData paginationData = new PaginationData(0, null, false);
-        PaginationJPA paginationJPA = new PaginationJPA(0, null, true);
+        PaginationData paginationData = new PaginationData(0, null, false,10 );
+        PaginationJPA paginationJPA = new PaginationJPA(0, null, true, 10);
         Page<ProductEntity> productEntities = new PageImpl<>(List.of(
                 new ProductEntity(1L, "burger", "a burger", BigDecimal.valueOf(0), 1L, Collections.singleton(new CategoryEntity()), new BrandEntity()),
                 new ProductEntity(2L, "burger2", "another burger", BigDecimal.valueOf(0), 1L, Collections.singleton(new CategoryEntity()), new BrandEntity())

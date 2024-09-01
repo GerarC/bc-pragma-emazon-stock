@@ -93,8 +93,8 @@ class CategoryJpaAdapterTest {
 
     @Test
     void getAllCategories() {
-        PaginationData paginationData = new PaginationData(0, null, false);
-        PaginationJPA paginationJPA = new PaginationJPA(0, null, true);
+        PaginationData paginationData = new PaginationData(0, null, false, 10);
+        PaginationJPA paginationJPA = new PaginationJPA(0, null, true, 10);
         Page<CategoryEntity> categoryEntities = new PageImpl<>(List.of(
                 new CategoryEntity(1L, "nothing", "description", null),
                 new CategoryEntity(2L, "something", "second description", null)
@@ -115,8 +115,8 @@ class CategoryJpaAdapterTest {
 
     @Test
     void getAllCategoriesSorted() {
-        PaginationData paginationData = new PaginationData(0, "name", true);
-        PaginationJPA paginationJPA = new PaginationJPA(0, "name", true);
+        PaginationData paginationData = new PaginationData(0, "name", true, 10);
+        PaginationJPA paginationJPA = new PaginationJPA(0, "name", true, 10);
         Page<CategoryEntity> categoryEntities = new PageImpl<>(List.of(
                 new CategoryEntity(1L, "nothing", "description", null),
                 new CategoryEntity(2L, "something", "second description", null)
@@ -137,8 +137,8 @@ class CategoryJpaAdapterTest {
 
     @Test
     void getAllCategoriesSortedDesc() {
-        PaginationData paginationData = new PaginationData(0, "name", false);
-        PaginationJPA paginationJPA = new PaginationJPA(0, "name", false);
+        PaginationData paginationData = new PaginationData(0, "name", false, 10);
+        PaginationJPA paginationJPA = new PaginationJPA(0, "name", false, 10);
         Page<CategoryEntity> categoryEntities = new PageImpl<>(List.of(
                 new CategoryEntity(1L, "nothing", "description", null),
                 new CategoryEntity(2L, "something", "second description", null)

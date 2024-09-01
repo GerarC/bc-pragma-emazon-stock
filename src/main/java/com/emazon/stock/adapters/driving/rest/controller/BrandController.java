@@ -9,9 +9,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -31,7 +33,8 @@ public class BrandController {
             @ApiResponse(responseCode = "400", description = "Brand description is too long", content = @Content)
     })
     @PostMapping
-    public ResponseEntity<BrandResponse> createBrand(@RequestBody BrandRequest brandRequest) {
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<BrandResponse> createBrand(@Valid @RequestBody BrandRequest brandRequest) {
         brandService.save(brandRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -41,6 +44,7 @@ public class BrandController {
             @ApiResponse(responseCode = "200", description = "A list of the found brands", content = @Content),
     })
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")
     public ResponseEntity<PageResponse<BrandResponse>> getAll(@RequestParam Map<String, String> query) {
         PageResponse<BrandResponse> foundBrands;
         PaginationRequest paginationRequest = new PaginationRequest(query);

@@ -8,16 +8,19 @@ import com.emazon.stock.adapters.driving.rest.service.BrandService;
 import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityAlreadyExistsException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
-import com.emazon.stock.domain.model.Brand;
 import com.emazon.stock.domain.utils.DomainConstants;
 import com.emazon.stock.adapters.driving.rest.utils.JsonParser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -32,13 +35,21 @@ class BrandControllerTest {
 
 
     MockMvc mockMvc;
+    private final WebApplicationContext webApplicationContext;
 
     @MockBean
     private BrandService brandService;
 
+
     @Autowired
-    BrandControllerTest(MockMvc mockMvc) {
-        this.mockMvc = mockMvc;
+    public BrandControllerTest(WebApplicationContext webApplicationContext) {
+        this.webApplicationContext = webApplicationContext;
+    }
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -54,9 +65,9 @@ class BrandControllerTest {
 
     @Test
     void createBrandIsRepeated() throws Exception {
-        BrandRequest brandMock = BrandRequest.builder().name("nothing").description("Another brand with the same name").build();
+        BrandRequest brandMock = BrandRequest.builder().name("nothing").description("brand with a name with more than 50 chars").build();
 
-        doThrow(new EntityAlreadyExistsException(Brand.class.getSimpleName(), "nothing")).when(brandService).save(brandMock);
+        doThrow(new EntityAlreadyExistsException("entity", "nothing")).when(brandService).save(brandMock);
         this.mockMvc.perform(post("/brands")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(brandMock)))
@@ -109,7 +120,7 @@ class BrandControllerTest {
 
     @Test
     void getAll() throws Exception {
-        PaginationRequest paginationRequest = new PaginationRequest(0, null, true);
+        PaginationRequest paginationRequest = new PaginationRequest(0, null, true, 10);
         PageResponse<BrandResponse> mockDTOs = new PageResponse<>();
         mockDTOs.setContent(List.of(
                 new BrandResponse(1L, "nothing", "description"),
@@ -122,7 +133,7 @@ class BrandControllerTest {
 
     @Test
     void getAllWithParams() throws Exception {
-        PaginationRequest paginationRequest = new PaginationRequest(0, "name", true);
+        PaginationRequest paginationRequest = new PaginationRequest(0, "name", true, 10);
         PageResponse<BrandResponse> mockDTOs = new PageResponse<>();
         mockDTOs.setContent(List.of(
                 new BrandResponse(1L, "nothing", "description"),
@@ -132,7 +143,8 @@ class BrandControllerTest {
         this.mockMvc.perform(get("/brands")
                         .queryParam("page", "0")
                         .queryParam("sortBy", "name")
-                        .queryParam("asc", "true"))
+                        .queryParam("asc", "true")
+                        .queryParam("pageSize", "10"))
                 .andExpect(status().isOk());
     }
 }
