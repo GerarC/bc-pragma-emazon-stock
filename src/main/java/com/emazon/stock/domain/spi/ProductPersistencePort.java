@@ -11,4 +11,5 @@ public interface ProductPersistencePort {
     void save(Product product);
     DomainPage<Product> getAllProducts(PaginationData paginationData);
     List<Category> getProductCategories(Long id);
+    void addSupply(Long id, Product product);
 }

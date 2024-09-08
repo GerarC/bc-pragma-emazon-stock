@@ -42,4 +42,11 @@ public class ProductJpaAdapter implements ProductPersistencePort {
         ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
         return categoryEntityMapper.toCategories(productEntity.getCategories().stream().toList());
     }
+
+    @Override
+    public void addSupply(Long id, Product product) {
+        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
+        productEntity.setQuantity(productEntity.getQuantity() + product.getQuantity());
+        productRepository.save(productEntity);
+    }
 }

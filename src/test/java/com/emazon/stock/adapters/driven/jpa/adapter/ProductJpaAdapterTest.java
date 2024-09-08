@@ -110,4 +110,30 @@ class ProductJpaAdapterTest {
         verify(productRepository).findById((1L));
         verify(categoryEntityMapper, times(0)).toCategories(anyList());
     }
+
+    @Test
+    void addSupply() {
+        Long id = 1L;
+        Product product = new Product(null, null, null, null, 200L, null, null);
+        ProductEntity productEntity = new ProductEntity(null, null, null, null, 200L, null, null);
+        ProductEntity foundEntity = new ProductEntity(id, "burger", "a burger", BigDecimal.valueOf(0), 10L, Collections.singleton(new CategoryEntity()), new BrandEntity());
+        when(productEntityMapper.toEntity(product)).thenReturn(productEntity);
+        when(productRepository.findById(id)).thenReturn(Optional.of(foundEntity));
+        when(productRepository.save(any())).thenReturn(null);
+        productJpaAdapter.addSupply(id, product);
+        verify(productRepository).save(any());
+    }
+
+    @Test
+    void addSupply_ProductNotFoundError() {
+        Long id = 1L;
+        Product product = new Product(null, null, null, null, 200L, null, null);
+
+        when(productRepository.findById((id))).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> productJpaAdapter.addSupply(id, product));
+        verify(productRepository).findById((id));
+        verify(categoryEntityMapper, times(0)).toEntity(any());
+    }
+
+
 }

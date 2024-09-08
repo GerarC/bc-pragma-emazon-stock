@@ -1,4 +1,4 @@
-package com.emazon.stock.configuration;
+package com.emazon.stock.configuration.feign;
 
 import feign.Logger;
 import org.springframework.context.annotation.Bean;

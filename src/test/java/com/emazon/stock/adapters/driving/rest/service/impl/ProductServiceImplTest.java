@@ -28,8 +28,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ProductServiceImplTest {
 
@@ -115,5 +114,16 @@ class ProductServiceImplTest {
         assertEquals(categoryResponses.get(0).getId(), returnedCategories.get(0).getId());
         assertEquals(categoryResponses.get(1).getName(), returnedCategories.get(1).getName());
 
+    }
+
+    @Test
+    void addSupply() {
+        Long id = 1L;
+        ProductRequest mockRequest = new ProductRequest(null, null, null, 1L, null, null);
+        Product mockProduct = new Product(null, null, null, null, 1L, null, null);
+        when(productRequestMapper.toProduct(mockRequest)).thenReturn(mockProduct);
+        doNothing().when(productServicePort).addSupply(id, mockProduct);
+        productService.addSupply(id, mockRequest);
+        verify(productServicePort).addSupply(any(), any());
     }
 }

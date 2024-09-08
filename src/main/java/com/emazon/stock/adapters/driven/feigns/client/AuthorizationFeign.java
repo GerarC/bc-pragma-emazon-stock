@@ -1,8 +1,8 @@
-package com.emazon.stock.adapters.driven.feigns;
+package com.emazon.stock.adapters.driven.feigns.client;
 
 import com.emazon.stock.adapters.driven.feigns.dto.request.AuthorizationRequest;
 import com.emazon.stock.adapters.driven.feigns.dto.response.AuthorizationResponse;
-import com.emazon.stock.configuration.FeignClientConfiguration;
+import com.emazon.stock.configuration.feign.FeignClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;

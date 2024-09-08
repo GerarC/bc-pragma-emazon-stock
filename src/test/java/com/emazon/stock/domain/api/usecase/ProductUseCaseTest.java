@@ -156,4 +156,13 @@ class ProductUseCaseTest {
         assertEquals(categories.size(), returnedCategories.size());
         assertEquals(categories.get(0).getId(), returnedCategories.get(0).getId());
     }
+
+    @Test
+    void addSupply() {
+        Long id = 1L;
+        Product mockProduct = new Product(null, null, null, null, 1L, null, null);
+        doNothing().when(productPersistencePort).addSupply(id, mockProduct);
+        productUseCase.addSupply(id, mockProduct);
+        verify(productPersistencePort).addSupply(any(), any());
+    }
 }

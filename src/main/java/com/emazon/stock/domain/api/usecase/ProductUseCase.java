@@ -69,4 +69,9 @@ public class ProductUseCase implements ProductServicePort {
     public List<Category> getProductCategories(Long id) {
         return productPersistencePort.getProductCategories(id);
     }
+
+    @Override
+    public void addSupply(Long id, Product product){
+        productPersistencePort.addSupply(id, product);
+    }
 }

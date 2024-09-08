@@ -13,4 +13,5 @@ public interface ProductService {
     void save(ProductRequest product);
     PageResponse<ProductResponse> getAllProducts(PaginationRequest paginationRequest);
     List<ProductCategoryResponse> getProductCategories(Long id);
+    void addSupply(Long id, ProductRequest productRequest);
 }

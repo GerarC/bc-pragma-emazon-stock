@@ -90,4 +90,15 @@ class ProductControllerTest {
                 .andExpect(content().json(JsonParser.toJson(categoryResponses)))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void addSupplies() throws Exception {
+        Long id = 1L;
+        ProductRequest productRequest = new ProductRequest(null, null, null, 1L, null, null);
+        doNothing().when(productService).addSupply(id, productRequest);
+        this.mockMvc.perform(post("/products/1/add-supply")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonParser.toJson(productRequest)))
+                .andExpect(status().isOk());
+    }
 }

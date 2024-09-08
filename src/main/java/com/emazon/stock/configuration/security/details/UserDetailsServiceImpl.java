@@ -1,6 +1,6 @@
 package com.emazon.stock.configuration.security.details;
 
-import com.emazon.stock.adapters.driven.feigns.AuthorizationFeign;
+import com.emazon.stock.adapters.driven.feigns.client.AuthorizationFeign;
 import com.emazon.stock.adapters.driven.feigns.dto.request.AuthorizationRequest;
 import com.emazon.stock.adapters.driven.feigns.dto.response.AuthorizationResponse;
 import com.emazon.stock.configuration.security.exceptions.NotAuthorizedException;

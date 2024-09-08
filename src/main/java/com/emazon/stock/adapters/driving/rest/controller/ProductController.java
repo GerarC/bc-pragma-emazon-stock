@@ -71,4 +71,11 @@ public class ProductController {
     public ResponseEntity<List<ProductCategoryResponse>> getProductCategories(@PathVariable Long id){
         return ResponseEntity.ok(productService.getProductCategories(id));
     }
+
+    @PostMapping("/{id}/add-supply")
+    @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT')")
+    public ResponseEntity<ProductResponse> addSupplies(@PathVariable Long id, @RequestBody ProductRequest productRequest){
+        productService.addSupply(id, productRequest);
+        return ResponseEntity.ok().build();
+    }
 }

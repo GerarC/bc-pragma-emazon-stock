@@ -44,4 +44,12 @@ public class ProductServiceImpl implements ProductService {
                 productServicePort.getProductCategories(id)
         );
     }
+
+    @Override
+    public void addSupply(Long id, ProductRequest productRequest) {
+        productServicePort.addSupply(
+                id,
+                productRequestMapper.toProduct(productRequest)
+        );
+    }
 }
