@@ -1,14 +1,8 @@
 package com.emazon.stock.domain.model;
 
-import com.emazon.stock.domain.exception.EmptyFieldException;
-import com.emazon.stock.domain.exception.NegativeNotAllowedException;
-import com.emazon.stock.domain.exception.OutOfBoundsException;
-import com.emazon.stock.domain.utils.DomainConstants;
-
 import java.math.BigDecimal;
 import java.util.List;
 
-import static java.util.Objects.requireNonNull;
 
 public class Product {
     private Long id;
@@ -21,23 +15,14 @@ public class Product {
 
     // Constructors
 
-
     public Product(Long id, String name, String description, BigDecimal price, Long quantity, List<Category> categories, Brand brand) {
-        if(name.trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
-        if(description.trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.DESCRIPTION.toString());
-        if(price.compareTo(BigDecimal.ZERO) < 0) throw new NegativeNotAllowedException(DomainConstants.Field.PRICE.toString());
-        if(quantity < 0) throw new NegativeNotAllowedException(DomainConstants.Field.QUANTITY.toString());
-        if(categories.isEmpty()) throw new EmptyFieldException(DomainConstants.Field.CATEGORIES.toString());
-        if(categories.size() > 3) throw new OutOfBoundsException(DomainConstants.Field.CATEGORIES.toString());
-
-
         this.id = id;
-        this.name = requireNonNull(name, DomainConstants.FIELD_NAME_NULL_MESSAGE);
-        this.description = requireNonNull(description, DomainConstants.FIELD_DESCRIPTION_NULL_MESSAGE);
-        this.price = requireNonNull(price, DomainConstants.FIELD_PRICE_NULL_MESSAGE);
-        this.quantity = requireNonNull(quantity, DomainConstants.FIELD_DESCRIPTION_NULL_MESSAGE);
-        this.categories = requireNonNull(categories, DomainConstants.FIELD_DESCRIPTION_NULL_MESSAGE);
-        this.brand = requireNonNull(brand, DomainConstants.FIELD_DESCRIPTION_NULL_MESSAGE);
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+        this.categories = categories;
+        this.brand = brand;
     }
 
     public Product() {

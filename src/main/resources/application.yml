@@ -1,0 +1,8 @@
+spring:
+    application:
+        name: stock
+    profiles:
+        active: local
+
+appDescription: "Emazon's Stock Microservice API"
+appVersion: "0.0.1"

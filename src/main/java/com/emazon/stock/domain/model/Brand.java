@@ -1,11 +1,6 @@
 package com.emazon.stock.domain.model;
 
-import com.emazon.stock.domain.exception.EmptyFieldException;
-import com.emazon.stock.domain.utils.DomainConstants;
-
 import java.util.List;
-
-import static java.util.Objects.requireNonNull;
 
 public class Brand {
     // Attributes
@@ -17,18 +12,16 @@ public class Brand {
 
     // Constructors
 
-
     public Brand(Long id, String name, String description, List<Product> products) {
-        if(name.trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
-        if(description.trim().isEmpty()) throw new EmptyFieldException(DomainConstants.Field.DESCRIPTION.toString());
         this.id = id;
-        this.name = requireNonNull(name, DomainConstants.FIELD_NAME_NULL_MESSAGE);
-        this.description = requireNonNull(description, DomainConstants.FIELD_DESCRIPTION_NULL_MESSAGE);
-        this.products = requireNonNull(products, DomainConstants.FIELD_PRODUCTS_NULL_MESSAGE);
+        this.name =  name;
+        this.description = description;
+        this.products = products;
     }
 
     public Brand() {
     }
+
     // Getters and Setters
 
     public Long getId() {

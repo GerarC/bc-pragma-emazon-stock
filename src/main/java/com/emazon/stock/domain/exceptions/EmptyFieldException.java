@@ -1,7 +1,7 @@
-package com.emazon.stock.domain.exception;
+package com.emazon.stock.domain.exceptions;
 
 public class EmptyFieldException extends RuntimeException {
     public EmptyFieldException(String message) {
-        super(message);
+        super("Empty '" + message + "' field not allowed");
     }
 }
