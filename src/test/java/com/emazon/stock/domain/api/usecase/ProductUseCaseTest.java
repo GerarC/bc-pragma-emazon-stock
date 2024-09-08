@@ -133,7 +133,7 @@ class ProductUseCaseTest {
 
     @Test
     void getAllProducts() {
-        PaginationData paginationData = new PaginationData(0, null, true);
+        PaginationData paginationData = new PaginationData(0, null, true, 10);
         DomainPage<Product> mockProducts = new DomainPage<>();
         mockProducts.setContent(List.of(
                 new Product(1L, "burger", "a burger", BigDecimal.valueOf(0), 1L, Collections.singletonList(new Category()), new Brand()),
@@ -150,5 +150,19 @@ class ProductUseCaseTest {
 
     @Test
     void getProductCategories() {
+        List<Category> categories = List.of(new Category(1L, "nothing", "nothing", null));
+        when(productPersistencePort.getProductCategories(1L)).thenReturn(categories);
+        List<Category> returnedCategories = productUseCase.getProductCategories(1L);
+        assertEquals(categories.size(), returnedCategories.size());
+        assertEquals(categories.get(0).getId(), returnedCategories.get(0).getId());
+    }
+
+    @Test
+    void addSupply() {
+        Long id = 1L;
+        Product mockProduct = new Product(null, null, null, null, 1L, null, null);
+        doNothing().when(productPersistencePort).addSupply(id, mockProduct);
+        productUseCase.addSupply(id, mockProduct);
+        verify(productPersistencePort).addSupply(any(), any());
     }
 }

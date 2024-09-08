@@ -1,6 +1,6 @@
 package com.emazon.stock.adapters.driving.rest.utils;
 
-import com.emazon.stock.adapters.driving.rest.utils.exceptions.JsonParseException;
+import com.emazon.stock.adapters.driving.rest.exceptions.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonParser {

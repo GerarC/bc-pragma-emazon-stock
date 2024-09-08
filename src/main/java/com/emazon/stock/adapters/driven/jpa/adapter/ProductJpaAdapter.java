@@ -1,9 +1,11 @@
 package com.emazon.stock.adapters.driven.jpa.adapter;
 
 import com.emazon.stock.adapters.driven.jpa.entity.ProductEntity;
+import com.emazon.stock.adapters.driven.jpa.mapper.CategoryEntityMapper;
 import com.emazon.stock.adapters.driven.jpa.mapper.ProductEntityMapper;
 import com.emazon.stock.adapters.driven.jpa.mapper.PaginationJPAMapper;
 import com.emazon.stock.adapters.driven.jpa.persistence.ProductRepository;
+import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.model.Product;
 import com.emazon.stock.domain.spi.ProductPersistencePort;
@@ -20,6 +22,7 @@ public class ProductJpaAdapter implements ProductPersistencePort {
 
     private final ProductRepository productRepository;
     private final ProductEntityMapper productEntityMapper;
+    private final CategoryEntityMapper categoryEntityMapper;
     private final PaginationJPAMapper paginationJPAMapper;
 
     @Override
@@ -36,7 +39,14 @@ public class ProductJpaAdapter implements ProductPersistencePort {
 
     @Override
     public List<Category> getProductCategories(Long id) {
-        // TODO: UH6
-        return List.of();
+        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
+        return categoryEntityMapper.toCategories(productEntity.getCategories().stream().toList());
+    }
+
+    @Override
+    public void addSupply(Long id, Product product) {
+        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
+        productEntity.setQuantity(productEntity.getQuantity() + product.getQuantity());
+        productRepository.save(productEntity);
     }
 }

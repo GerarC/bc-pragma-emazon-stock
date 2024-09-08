@@ -10,9 +10,23 @@ spring:
             ddl-auto: update
         show-sql: true
 
+    mvc:
+        log-request-details: true
+
 logging:
     level:
         web: trace
         org:
             springframework:
                 web: trace
+
+server:
+    port: 8091
+
+allowed-origins:
+    http://localhost:3000/,
+    *,
+
+emazon:
+    user:
+        base-url: localhost:8090

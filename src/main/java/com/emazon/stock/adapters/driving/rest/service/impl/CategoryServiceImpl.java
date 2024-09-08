@@ -34,6 +34,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public PageResponse<CategoryResponse> getAllCategories(PaginationRequest paginationRequest) {
-        return categoryResponseMapper.toResponsePage(categoryServicePort.getAllCategories(paginationRequestMapper.toPaginationData(paginationRequest)));
+        return categoryResponseMapper.toResponsePage(
+                categoryServicePort.getAllCategories(
+                        paginationRequestMapper.toPaginationData(paginationRequest)
+                )
+        );
     }
 }

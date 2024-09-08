@@ -1,4 +1,4 @@
-package com.emazon.stock.adapters.driving.rest.utils.exceptions;
+package com.emazon.stock.adapters.driving.rest.exceptions;
 
 public class JsonParseException extends RuntimeException {
     public JsonParseException(Throwable cause) {

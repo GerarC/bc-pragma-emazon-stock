@@ -58,8 +58,8 @@ class BrandServiceImplTest {
 
     @Test
     void getAllBrands() {
-        PaginationData paginationData = new PaginationData(0, "", true);
-        PaginationRequest paginationRequest = new PaginationRequest(0, null, true);
+        PaginationData paginationData = new PaginationData(0, "", true, 10);
+        PaginationRequest paginationRequest = new PaginationRequest(0, null, true, 10);
         DomainPage<Brand> mockBrands = new DomainPage<>();
         mockBrands.setContent(List.of(
                 new Brand(1L, "nothing", "description", null),

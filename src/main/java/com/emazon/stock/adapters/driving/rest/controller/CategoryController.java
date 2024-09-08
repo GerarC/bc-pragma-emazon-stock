@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -32,6 +33,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "Category description is too long", content = @Content)
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest categoryRequest) {
         categoryService.save(categoryRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -48,15 +50,17 @@ public class CategoryController {
             @ApiResponse(responseCode = "404", description = "Category not found", content = @Content)
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.getCategory(id));
     }
 
     @Operation(summary = "Gets all categories, they are paged, if you want it, you can sor by name or description")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "A list of the found categories", content = @Content),
+            @ApiResponse(responseCode = "200", description = "A list of the found categories", content = @Content(mediaType = "application/json")),
     })
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")
     public ResponseEntity<PageResponse<CategoryResponse>> getAll(@RequestParam Map<String, String> query) {
         PageResponse<CategoryResponse> foundCategories;
         PaginationRequest paginationRequest = new PaginationRequest(query);

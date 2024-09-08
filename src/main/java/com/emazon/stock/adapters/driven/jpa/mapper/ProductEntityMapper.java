@@ -1,8 +1,10 @@
 package com.emazon.stock.adapters.driven.jpa.mapper;
 
 
+import com.emazon.stock.adapters.driven.jpa.entity.BrandEntity;
 import com.emazon.stock.adapters.driven.jpa.entity.CategoryEntity;
 import com.emazon.stock.adapters.driven.jpa.entity.ProductEntity;
+import com.emazon.stock.domain.model.Brand;
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.model.Product;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
@@ -18,6 +20,12 @@ public interface ProductEntityMapper {
     ProductEntity toEntity(Product product);
 
     Product toProduct(ProductEntity productEntity);
+
+    @Mapping(target = "products", ignore = true)
+    Category toCategory(CategoryEntity categoryEntity);
+
+    @Mapping(target = "products", ignore = true)
+    Brand toBrand(BrandEntity brandEntity);
 
     List<Product> toProducts(List<ProductEntity> productEntities);
 
