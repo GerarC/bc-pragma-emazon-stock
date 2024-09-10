@@ -6,6 +6,7 @@ import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ProductCategoryResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ProductResponse;
 import com.emazon.stock.adapters.driving.rest.service.ProductService;
+import com.emazon.stock.adapters.driving.rest.utils.RestConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,15 +28,15 @@ import java.util.Map;
 public class ProductController {
     private final ProductService productService;
 
-    @Operation(summary = "Adds a new product with its brand and categories")
+    @Operation(summary = RestConstants.SWAGGER_ADD_PRODUCT_SUMMARY)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Product added", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Associated brand doesn't exist", content = @Content),
-            @ApiResponse(responseCode = "409", description = "Some categories of the product are duplicated", content = @Content),
-            @ApiResponse(responseCode = "404", description = "One of the associated categories don't exist", content = @Content),
-            @ApiResponse(responseCode = "400", description = "Some of the required attributes is null", content = @Content),
-            @ApiResponse(responseCode = "400", description = "Product name is too long", content = @Content),
-            @ApiResponse(responseCode = "400", description = "Product description is too long", content = @Content)
+            @ApiResponse(responseCode = RestConstants.CODE_CREATED, description = RestConstants.SWAGGER_ADD_PRODUCT_RESPONSE, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_CONFLICT, description = RestConstants.SWAGGER_ADD_PRODUCT_BRAND_NOT_EXISTS, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_CONFLICT, description = RestConstants.SWAGGER_ADD_PRODUCT_DUPLICATED_CATEGORIES, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_NOT_FOUND, description = RestConstants.SWAGGER_ADD_PRODUCT_CATEGORY_NOT_FOUND, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_CONFLICT, description = RestConstants.SWAGGER_ADD_PRODUCT_LONG_NAME, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_CONFLICT, description = RestConstants.SWAGGER_ADD_PRODUCT_LONG_DESCRIPTION, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_BAD_REQUEST, description = RestConstants.SWAGGER_VALIDATIONS_DONT_PASS, content = @Content)
     })
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -44,9 +45,9 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "Gets all products, they are paged, if you want it, you can sort by any thing")
+    @Operation(summary = RestConstants.SWAGGER_GET_ALL_PRODUCTS_SUMMARY)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "A page of the found categories", content = @Content(mediaType = "application/json", schema =  @Schema(implementation = PageResponse.class))),
+            @ApiResponse(responseCode = RestConstants.CODE_OK, description = RestConstants.SWAGGER_GET_ALL_PRODUCTS_RESPONSE, content = @Content(mediaType = RestConstants.SWAGGER_JSON, schema =  @Schema(implementation = PageResponse.class))),
     })
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")
@@ -56,15 +57,15 @@ public class ProductController {
     }
 
 
-    @Operation(summary = "Get all categories of a product")
+    @Operation(summary = RestConstants.SWAGGER_GET_PRODUCT_CATEGORY_SUMMARY)
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Product found",
-                    content = @Content(mediaType = "application/json",
+                    responseCode = RestConstants.CODE_OK,
+                    description = RestConstants.SWAGGER_GET_PRODUCT_CATEGORY_RESPONSE,
+                    content = @Content(mediaType = RestConstants.SWAGGER_JSON,
                             array = @ArraySchema(schema = @Schema(implementation = ProductCategoryResponse.class)))
             ),
-            @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
+            @ApiResponse(responseCode = RestConstants.CODE_NOT_FOUND, description = RestConstants.SWAGGER_GET_PRODUCT_CATEGORY_NOT_FOUND, content = @Content)
     })
     @GetMapping("/{id}/categories")
     @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")
@@ -72,7 +73,17 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductCategories(id));
     }
 
-    @PostMapping("/{id}/add-supply")
+    @Operation(summary = RestConstants.SWAGGER_ADD_SUPPLIES_SUMMARY)
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = RestConstants.CODE_OK,
+                    description = RestConstants.SWAGGER_ADD_SUPPLIES_RESPONSE,
+                    content = @Content(mediaType = RestConstants.SWAGGER_JSON,
+                            array = @ArraySchema(schema = @Schema(implementation = ProductCategoryResponse.class)))
+            ),
+            @ApiResponse(responseCode = RestConstants.CODE_NOT_FOUND, description = RestConstants.SWAGGER_GET_PRODUCT_CATEGORY_NOT_FOUND, content = @Content)
+    })
+    @PutMapping("/{id}/add-supply")
     @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT')")
     public ResponseEntity<ProductResponse> addSupplies(@PathVariable Long id, @RequestBody ProductRequest productRequest){
         productService.addSupply(id, productRequest);
