@@ -5,6 +5,7 @@ import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.service.CategoryService;
+import com.emazon.stock.adapters.driving.rest.utils.RestConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,12 +26,13 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @Operation(summary = "Add a new category")
+    @Operation(summary = RestConstants.SWAGGER_ADD_CATEGORY_SUMMARY)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Category added", content = @Content),
-            @ApiResponse(responseCode = "409", description = "Category already exists", content = @Content),
-            @ApiResponse(responseCode = "400", description = "Category name is too long", content = @Content),
-            @ApiResponse(responseCode = "400", description = "Category description is too long", content = @Content)
+            @ApiResponse(responseCode = RestConstants.CODE_CREATED, description = RestConstants.SWAGGER_ADD_CATEGORY_RESPONSE, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_CONFLICT, description = RestConstants.SWAGGER_ADD_CATEGORY_ALREADY_EXISTS, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_BAD_REQUEST, description = RestConstants.SWAGGER_ADD_CATEGORY_LONG_NAME, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_BAD_REQUEST, description = RestConstants.SWAGGER_ADD_CATEGORY_LONG_DESCRIPTION, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_BAD_REQUEST, description = RestConstants.SWAGGER_VALIDATIONS_DONT_PASS, content = @Content)
     })
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -39,15 +41,15 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "Get a category searching by its id")
+    @Operation(summary = RestConstants.SWAGGER_GET_CATEGORY_BY_ID_SUMMARY)
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Category found",
-                    content = @Content(mediaType = "application/json",
+                    responseCode = RestConstants.CODE_OK,
+                    description = RestConstants.SWAGGER_GET_CATEGORY_BY_ID_FOUND,
+                    content = @Content(mediaType = RestConstants.SWAGGER_JSON,
                             schema = @Schema(implementation = CategoryResponse.class))
             ),
-            @ApiResponse(responseCode = "404", description = "Category not found", content = @Content)
+            @ApiResponse(responseCode = RestConstants.CODE_NOT_FOUND, description = RestConstants.SWAGGER_GET_CATEGORY_BY_ID_NOT_FOUND, content = @Content)
     })
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -55,9 +57,9 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategory(id));
     }
 
-    @Operation(summary = "Gets all categories, they are paged, if you want it, you can sor by name or description")
+    @Operation(summary = RestConstants.SWAGGER_GET_ALL_CATEGORIES_SUMMARY)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "A list of the found categories", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = RestConstants.CODE_OK, description = RestConstants.SWAGGER_GET_ALL_CATEGORIES_RESPONSE, content = @Content(mediaType = RestConstants.SWAGGER_JSON)),
     })
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")

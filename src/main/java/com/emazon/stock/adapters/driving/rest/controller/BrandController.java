@@ -5,6 +5,7 @@ import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.service.BrandService;
+import com.emazon.stock.adapters.driving.rest.utils.RestConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,12 +26,13 @@ public class BrandController {
 
     private final BrandService brandService;
 
-    @Operation(summary = "Add a new brand")
+    @Operation(summary = RestConstants.SWAGGER_ADD_BRAND_SUMMARY)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Brand added", content = @Content),
-            @ApiResponse(responseCode = "409", description = "Brand already exists", content = @Content),
-            @ApiResponse(responseCode = "400", description = "Brand name is too long", content = @Content),
-            @ApiResponse(responseCode = "400", description = "Brand description is too long", content = @Content)
+            @ApiResponse(responseCode = RestConstants.CODE_OK, description = RestConstants.SWAGGER_ADD_BRAND_RESPONSE, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_CONFLICT, description = RestConstants.SWAGGER_ADD_BRAND_ALREADY_EXISTS, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_BAD_REQUEST, description = RestConstants.SWAGGER_ADD_BRAND_LONG_NAME, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_BAD_REQUEST, description = RestConstants.SWAGGER_ADD_BRAND_LONG_DESCRIPTION, content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_BAD_REQUEST, description = RestConstants.SWAGGER_VALIDATIONS_DONT_PASS, content = @Content)
     })
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -39,9 +41,9 @@ public class BrandController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "Gets all brands, they are paged, if you want it, you can sort by name or description")
+    @Operation(summary = RestConstants.SWAGGER_GET_ALL_BRANDS_SUMMARY)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "A list of the found brands", content = @Content),
+            @ApiResponse(responseCode = RestConstants.CODE_OK, description = RestConstants.SWAGGER_GET_ALL_BRANDS_RESPONSE, content = @Content),
     })
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")
