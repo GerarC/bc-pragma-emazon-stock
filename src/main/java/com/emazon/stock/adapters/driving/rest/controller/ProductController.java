@@ -65,7 +65,7 @@ public class ProductController {
                     content = @Content(mediaType = RestConstants.SWAGGER_JSON,
                             array = @ArraySchema(schema = @Schema(implementation = ProductCategoryResponse.class)))
             ),
-            @ApiResponse(responseCode = RestConstants.CODE_NOT_FOUND, description = RestConstants.SWAGGER_GET_PRODUCT_CATEGORY_NOT_FOUND, content = @Content)
+            @ApiResponse(responseCode = RestConstants.CODE_NOT_FOUND, description = RestConstants.SWAGGER_PRODUCT_NOT_FOUND, content = @Content)
     })
     @GetMapping("/{id}/categories")
     @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")
@@ -81,12 +81,44 @@ public class ProductController {
                     content = @Content(mediaType = RestConstants.SWAGGER_JSON,
                             array = @ArraySchema(schema = @Schema(implementation = ProductCategoryResponse.class)))
             ),
-            @ApiResponse(responseCode = RestConstants.CODE_NOT_FOUND, description = RestConstants.SWAGGER_GET_PRODUCT_CATEGORY_NOT_FOUND, content = @Content)
+            @ApiResponse(responseCode = RestConstants.CODE_NOT_FOUND, description = RestConstants.SWAGGER_PRODUCT_NOT_FOUND, content = @Content)
     })
     @PutMapping("/{id}/add-supply")
     @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT')")
     public ResponseEntity<ProductResponse> addSupplies(@PathVariable Long id, @RequestBody ProductRequest productRequest){
         productService.addSupply(id, productRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = RestConstants.SWAGGER_GET_PRODUCT_SUMMARY)
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = RestConstants.CODE_OK,
+                    description = RestConstants.SWAGGER_GET_PRODUCT_RESPONSE,
+                    content = @Content(mediaType = RestConstants.SWAGGER_JSON,
+                    schema = @Schema(implementation = ProductResponse.class))
+            ),
+            @ApiResponse(responseCode = RestConstants.CODE_NOT_FOUND, description = RestConstants.SWAGGER_PRODUCT_NOT_FOUND, content = @Content)
+    })
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id){
+        return ResponseEntity.ok(productService.getProduct(id));
+    }
+
+    @Operation(summary = RestConstants.SWAGGER_GET_PRODUCTS_SUMMARY)
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = RestConstants.CODE_OK,
+                    description = RestConstants.SWAGGER_GET_PRODUCTS_RESPONSE,
+                    content = @Content(mediaType = RestConstants.SWAGGER_JSON,
+                            array = @ArraySchema(schema = @Schema(implementation = ProductResponse.class)))
+            ),
+            @ApiResponse(responseCode = RestConstants.CODE_NOT_FOUND, description = RestConstants.SWAGGER_GET_PRODUCTS_NOT_FOUND, content = @Content)
+    })
+    @GetMapping("/get-by-ids")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    public ResponseEntity<List<ProductResponse>> getProductsByIds(@RequestParam List<Long> ids){
+        return ResponseEntity.ok(productService.getProducts(ids));
     }
 }

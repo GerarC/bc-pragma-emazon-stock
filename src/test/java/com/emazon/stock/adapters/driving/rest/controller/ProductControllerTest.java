@@ -26,8 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -96,7 +95,7 @@ class ProductControllerTest {
         Long id = 1L;
         ProductRequest productRequest = new ProductRequest(null, null, null, 1L, null, null);
         doNothing().when(productService).addSupply(id, productRequest);
-        this.mockMvc.perform(post("/products/1/add-supply")
+        this.mockMvc.perform(put("/products/1/add-supply")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(productRequest)))
                 .andExpect(status().isOk());

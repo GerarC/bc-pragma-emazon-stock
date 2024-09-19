@@ -52,4 +52,18 @@ public class ProductServiceImpl implements ProductService {
                 productRequestMapper.toProduct(productRequest)
         );
     }
+
+    @Override
+    public ProductResponse getProduct(Long id) {
+        return productResponseMapper.toResponse(
+                productServicePort.getProduct(id)
+        );
+    }
+
+    @Override
+    public List<ProductResponse> getProducts(List<Long> ids) {
+        return productResponseMapper.toResponses(
+                productServicePort.getProducts(ids)
+        );
+    }
 }

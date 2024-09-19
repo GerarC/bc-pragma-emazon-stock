@@ -14,4 +14,6 @@ public interface ProductService {
     PageResponse<ProductResponse> getAllProducts(PaginationRequest paginationRequest);
     List<ProductCategoryResponse> getProductCategories(Long id);
     void addSupply(Long id, ProductRequest productRequest);
+    ProductResponse getProduct(Long id);
+    List<ProductResponse> getProducts(List<Long> ids);
 }

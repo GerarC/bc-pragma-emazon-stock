@@ -9,6 +9,7 @@ import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.model.Product;
 import com.emazon.stock.domain.spi.ProductPersistencePort;
+import com.emazon.stock.domain.utils.DomainConstants;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
 import com.emazon.stock.domain.utils.pagination.PaginationData;
 import lombok.RequiredArgsConstructor;
@@ -39,14 +40,24 @@ public class ProductJpaAdapter implements ProductPersistencePort {
 
     @Override
     public List<Category> getProductCategories(Long id) {
-        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
+        ProductEntity productEntity = productRepository.findById(id).orElseThrow(()
+                -> new EntityNotFoundException(String.format(DomainConstants.PRODUCT_NOT_FOUND_MESSAGE, id)));
         return categoryEntityMapper.toCategories(productEntity.getCategories().stream().toList());
     }
 
     @Override
     public void addSupply(Long id, Product product) {
-        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
+        ProductEntity productEntity = productRepository.findById(id).orElseThrow(()
+                -> new EntityNotFoundException(String.format(DomainConstants.PRODUCT_NOT_FOUND_MESSAGE, id)));
         productEntity.setQuantity(productEntity.getQuantity() + product.getQuantity());
         productRepository.save(productEntity);
+    }
+
+    @Override
+    public Product getProduct(Long id) {
+        return productEntityMapper.toProduct(
+                productRepository.findById(id).orElseThrow(()
+                        -> new EntityNotFoundException(String.format(DomainConstants.PRODUCT_NOT_FOUND_MESSAGE, id)))
+        );
     }
 }
