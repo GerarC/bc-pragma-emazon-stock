@@ -44,5 +44,7 @@ public class DomainConstants {
     // Pages
     public static final Integer PAGE_SIZE = 10;
 
+    public static final String PRODUCT_NOT_FOUND_MESSAGE = "Product with id '%s' not found";
+
 
 }
