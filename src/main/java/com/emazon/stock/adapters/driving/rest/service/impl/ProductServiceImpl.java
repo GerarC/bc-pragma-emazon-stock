@@ -2,11 +2,13 @@ package com.emazon.stock.adapters.driving.rest.service.impl;
 
 import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.request.ProductRequest;
+import com.emazon.stock.adapters.driving.rest.dto.request.filter.ProductFilterRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ProductCategoryResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ProductResponse;
 import com.emazon.stock.adapters.driving.rest.mapper.request.PaginationRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.request.ProductRequestMapper;
+import com.emazon.stock.adapters.driving.rest.mapper.request.filter.ProductFilterRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.response.ProductResponseMapper;
 import com.emazon.stock.adapters.driving.rest.service.ProductService;
 import com.emazon.stock.domain.api.ProductServicePort;
@@ -22,6 +24,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRequestMapper productRequestMapper;
     private final PaginationRequestMapper paginationRequestMapper;
     private final ProductResponseMapper productResponseMapper;
+    private final ProductFilterRequestMapper productFilterRequestMapper;
 
 
     @Override
@@ -30,9 +33,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PageResponse<ProductResponse> getAllProducts(PaginationRequest paginationRequest) {
+    public PageResponse<ProductResponse> getAllProducts(ProductFilterRequest filter, PaginationRequest paginationRequest) {
         return productResponseMapper.toResponsePage(
                 productServicePort.getAllProducts(
+                        productFilterRequestMapper.toDomain(filter),
                         paginationRequestMapper.toPaginationData(paginationRequest)
                 )
         );

@@ -1,6 +1,7 @@
 package com.emazon.stock.adapters.driving.rest.controller;
 
 import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
+import com.emazon.stock.adapters.driving.rest.dto.request.PageQuery;
 import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
@@ -11,13 +12,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/categories")
@@ -59,11 +59,11 @@ public class CategoryController {
 
     @Operation(summary = RestConstants.SWAGGER_GET_ALL_CATEGORIES_SUMMARY)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = RestConstants.CODE_OK, description = RestConstants.SWAGGER_GET_ALL_CATEGORIES_RESPONSE, content = @Content(mediaType = RestConstants.SWAGGER_JSON)),
+            @ApiResponse(responseCode = RestConstants.CODE_OK, description = RestConstants.SWAGGER_GET_ALL_CATEGORIES_RESPONSE, useReturnTypeSchema = true),
     })
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")
-    public ResponseEntity<PageResponse<CategoryResponse>> getAll(@RequestParam Map<String, String> query) {
+    public ResponseEntity<PageResponse<CategoryResponse>> getAll(@Nullable PageQuery query) {
         PageResponse<CategoryResponse> foundCategories;
         PaginationRequest paginationRequest = new PaginationRequest(query);
         foundCategories = categoryService.getAllCategories(paginationRequest);

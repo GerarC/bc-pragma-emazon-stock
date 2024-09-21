@@ -11,6 +11,7 @@ import com.emazon.stock.domain.spi.BrandPersistencePort;
 import com.emazon.stock.domain.spi.CategoryPersistencePort;
 import com.emazon.stock.domain.spi.ProductPersistencePort;
 import com.emazon.stock.domain.utils.DomainConstants;
+import com.emazon.stock.domain.utils.filter.ProductFilter;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
 import com.emazon.stock.domain.utils.pagination.PaginationData;
 
@@ -61,8 +62,8 @@ public class ProductUseCase implements ProductServicePort {
     }
 
     @Override
-    public DomainPage<Product> getAllProducts(PaginationData paginationData) {
-        return productPersistencePort.getAllProducts(paginationData);
+    public DomainPage<Product> getAllProducts(ProductFilter filter, PaginationData paginationData) {
+        return productPersistencePort.getAllProducts(filter, paginationData);
     }
 
     @Override

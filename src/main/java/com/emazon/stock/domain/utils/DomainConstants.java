@@ -46,5 +46,9 @@ public class DomainConstants {
 
     public static final String PRODUCT_NOT_FOUND_MESSAGE = "Product with id '%s' not found";
 
+    public static final String BRAND_NOT_FOUND_ID = "Brand with id '%s' not found";
+    public static final String BRAND_NOT_FOUND_NAME = "Brand with name '%s' not found";
 
+    public static final String CATEGORY_NOT_FOUND_ID = "Category with id '%s' not found";
+    public static final String CATEGORY_NOT_FOUND_NAME = "Category with name '%s' not found";
 }

@@ -5,6 +5,7 @@ import com.emazon.stock.adapters.driven.jpa.mapper.CategoryEntityMapper;
 import com.emazon.stock.adapters.driven.jpa.mapper.PaginationJPAMapper;
 import com.emazon.stock.adapters.driven.jpa.persistence.CategoryRepository;
 import com.emazon.stock.domain.model.Category;
+import com.emazon.stock.domain.utils.DomainConstants;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
 import com.emazon.stock.domain.spi.CategoryPersistencePort;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
@@ -27,12 +28,16 @@ public class CategoryJpaAdapter implements CategoryPersistencePort {
 
     @Override
     public Category getCategory(Long id) {
-        return categoryEntityMapper.toCategory(categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " not found")));
+        return categoryEntityMapper.toCategory(categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+                String.format(DomainConstants.CATEGORY_NOT_FOUND_ID, id)
+        )));
     }
 
     @Override
     public Category getCategoryByName(String name) {
-        return categoryEntityMapper.toCategory(categoryRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Category with name " + name + " not found")));
+        return categoryEntityMapper.toCategory(categoryRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException(
+                String.format(DomainConstants.CATEGORY_NOT_FOUND_NAME, name)
+        )));
     }
 
     @Override

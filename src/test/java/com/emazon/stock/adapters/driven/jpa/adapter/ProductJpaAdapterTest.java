@@ -80,7 +80,7 @@ class ProductJpaAdapterTest {
         when(productRepository.findAll(any(Pageable.class))).thenReturn(productEntities);
         when(productEntityMapper.toDomainPage(any())).thenReturn(mockProducts);
         when(paginationJPAMapper.toJPA(paginationData)).thenReturn(paginationJPA);
-        DomainPage<Product> returnedProducts = productJpaAdapter.getAllProducts(paginationData);
+        DomainPage<Product> returnedProducts = productJpaAdapter.getAllProducts(null, paginationData);
         assertEquals(mockProducts.getContent().get(0).getName(), returnedProducts.getContent().get(0).getName());
         assertEquals(mockProducts.getContent().get(1).getName(), returnedProducts.getContent().get(1).getName());
     }
