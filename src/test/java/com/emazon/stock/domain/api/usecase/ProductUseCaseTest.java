@@ -139,10 +139,10 @@ class ProductUseCaseTest {
                 new Product(1L, "burger", "a burger", BigDecimal.valueOf(0), 1L, Collections.singletonList(new Category()), new Brand()),
                 new Product(2L, "burger2", "another burger", BigDecimal.valueOf(0), 1L, Collections.singletonList(new Category()), new Brand())
         ));
-        when(productPersistencePort.getAllProducts(paginationData)).thenReturn(mockProducts);
-        DomainPage<Product> products = productUseCase.getAllProducts(paginationData);
+        when(productPersistencePort.getAllProducts(null, paginationData)).thenReturn(mockProducts);
+        DomainPage<Product> products = productUseCase.getAllProducts(null, paginationData);
 
-        verify(productPersistencePort).getAllProducts(paginationData);
+        verify(productPersistencePort).getAllProducts(null, paginationData);
         assertEquals(mockProducts.getContent().size(), products.getContent().size());
         assertEquals(mockProducts.getContent().get(0).getId(), products.getContent().get(0).getId());
         assertEquals(mockProducts.getContent().get(1).getId(), products.getContent().get(1).getId());

@@ -30,16 +30,34 @@ public class SecurityConfiguration {
     @Value("${allowed-origins}")
     private List<String> allowedOrigins;
 
+    private static final String[] AUTH_WHITELIST = {
+            // -- Swagger UI
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         HttpSecurity httpSecurity = http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsConfiguration -> corsConfiguration.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(
-                        auth -> auth.anyRequest().authenticated()
+                        auth -> {
+                            auth.requestMatchers(AUTH_WHITELIST).permitAll();
+                            auth.anyRequest().authenticated();
+                        }
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
+                .exceptionHandling(handler -> handler.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

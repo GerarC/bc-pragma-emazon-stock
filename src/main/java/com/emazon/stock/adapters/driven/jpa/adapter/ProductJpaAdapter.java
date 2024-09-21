@@ -5,16 +5,19 @@ import com.emazon.stock.adapters.driven.jpa.mapper.CategoryEntityMapper;
 import com.emazon.stock.adapters.driven.jpa.mapper.ProductEntityMapper;
 import com.emazon.stock.adapters.driven.jpa.mapper.PaginationJPAMapper;
 import com.emazon.stock.adapters.driven.jpa.persistence.ProductRepository;
+import com.emazon.stock.adapters.driven.jpa.specification.ProductSpecificationBuilder;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.model.Product;
 import com.emazon.stock.domain.spi.ProductPersistencePort;
 import com.emazon.stock.domain.utils.DomainConstants;
+import com.emazon.stock.domain.utils.filter.ProductFilter;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
 import com.emazon.stock.domain.utils.pagination.PaginationData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -32,9 +35,10 @@ public class ProductJpaAdapter implements ProductPersistencePort {
     }
 
     @Override
-    public DomainPage<Product> getAllProducts(PaginationData paginationData) {
+    public DomainPage<Product> getAllProducts(ProductFilter filter, PaginationData paginationData) {
+        Specification<ProductEntity> specs = ProductSpecificationBuilder.filterBy(filter);
         Pageable pageable = paginationJPAMapper.toJPA(paginationData).createPageable();
-        Page<ProductEntity> returnProducts = productRepository.findAll(pageable);
+        Page<ProductEntity> returnProducts = productRepository.findAll(specs, pageable);
         return productEntityMapper.toDomainPage(returnProducts);
     }
 

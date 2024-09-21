@@ -9,6 +9,7 @@ import com.emazon.stock.adapters.driving.rest.dto.response.ProductCategoryRespon
 import com.emazon.stock.adapters.driving.rest.dto.response.ProductResponse;
 import com.emazon.stock.adapters.driving.rest.mapper.request.PaginationRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.request.ProductRequestMapper;
+import com.emazon.stock.adapters.driving.rest.mapper.request.filter.ProductFilterRequestMapper;
 import com.emazon.stock.adapters.driving.rest.mapper.response.ProductResponseMapper;
 import com.emazon.stock.domain.api.ProductServicePort;
 import com.emazon.stock.domain.model.Brand;
@@ -40,6 +41,8 @@ class ProductServiceImplTest {
 
     @Mock
     private ProductResponseMapper productResponseMapper;
+
+    @Mock private ProductFilterRequestMapper productFilterRequestMapper;
 
     @Mock
     private PaginationRequestMapper paginationRequestMapper;
@@ -74,13 +77,14 @@ class ProductServiceImplTest {
                 new ProductResponse(2L, "burger2", "a burger", BigDecimal.valueOf(0), 1L, Collections.singletonList("fastfood"), "burgerkink")
         ));
 
-        when(productServicePort.getAllProducts(paginationData)).thenReturn(mockPage);
+        when(productServicePort.getAllProducts(null, paginationData)).thenReturn(mockPage);
         when(productResponseMapper.toResponsePage(mockPage)).thenReturn(mockDTOs);
         when(paginationRequestMapper.toPaginationData(paginationRequest)).thenReturn(paginationData);
+        when(productFilterRequestMapper.toDomain(null)).thenReturn(null);
 
-        PageResponse<ProductResponse> returnedDTOs = productService.getAllProducts(paginationRequest);
+        PageResponse<ProductResponse> returnedDTOs = productService.getAllProducts(null, paginationRequest);
 
-        verify(productServicePort).getAllProducts(paginationData);
+        verify(productServicePort).getAllProducts(null, paginationData);
         assertEquals(mockDTOs.getContent().size(), returnedDTOs.getContent().size());
         assertEquals(mockDTOs.getContent().get(0).getId(), returnedDTOs.getContent().get(0).getId());
     }

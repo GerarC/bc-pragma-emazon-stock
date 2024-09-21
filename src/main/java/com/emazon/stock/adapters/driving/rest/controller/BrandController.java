@@ -1,6 +1,7 @@
 package com.emazon.stock.adapters.driving.rest.controller;
 
 import com.emazon.stock.adapters.driving.rest.dto.request.BrandRequest;
+import com.emazon.stock.adapters.driving.rest.dto.request.PageQuery;
 import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
@@ -10,14 +11,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/brands")
@@ -47,7 +47,7 @@ public class BrandController {
     })
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")
-    public ResponseEntity<PageResponse<BrandResponse>> getAll(@RequestParam Map<String, String> query) {
+    public ResponseEntity<PageResponse<BrandResponse>> getAll(@Nullable PageQuery query) {
         PageResponse<BrandResponse> foundBrands;
         PaginationRequest paginationRequest = new PaginationRequest(query);
         foundBrands = brandService.getAllBrands(paginationRequest);

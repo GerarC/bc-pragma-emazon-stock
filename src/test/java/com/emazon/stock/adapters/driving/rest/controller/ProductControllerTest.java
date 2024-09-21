@@ -72,7 +72,7 @@ class ProductControllerTest {
                 new ProductResponse(1L, "burger", "a burger", BigDecimal.valueOf(0), 1L, Collections.singletonList("fast-food"), "burger-kink"),
                 new ProductResponse(2L, "burger2", "a burger", BigDecimal.valueOf(0), 1L, Collections.singletonList("fast-food"), "burger-kink")
         ));
-        when(productService.getAllProducts(paginationRequest)).thenReturn(mockDTOs);
+        when(productService.getAllProducts(null, paginationRequest)).thenReturn(mockDTOs);
         this.mockMvc.perform(get("/products"))
                 //.andExpect(content().json(JsonParser.toJson(mockDTOs)))
                 .andExpect(status().isOk());

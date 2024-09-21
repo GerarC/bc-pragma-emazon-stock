@@ -6,6 +6,7 @@ import com.emazon.stock.adapters.driven.jpa.mapper.PaginationJPAMapper;
 import com.emazon.stock.adapters.driven.jpa.persistence.BrandRepository;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.model.Brand;
+import com.emazon.stock.domain.utils.DomainConstants;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
 import com.emazon.stock.domain.spi.BrandPersistencePort;
 import com.emazon.stock.domain.utils.pagination.PaginationData;
@@ -27,12 +28,16 @@ public class BrandJpaAdapter implements BrandPersistencePort {
 
     @Override
     public Brand getBrand(Long id) {
-        return brandEntityMapper.toBrand(brandRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Brand with id " + id + " not found")));
+        return brandEntityMapper.toBrand(brandRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+                String.format(DomainConstants.BRAND_NOT_FOUND_ID, id)
+        )));
     }
 
     @Override
     public Brand getBrandByName(String name) {
-        return brandEntityMapper.toBrand(brandRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Brand with name " + name + " not found")));
+        return brandEntityMapper.toBrand(brandRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException(
+                String.format(DomainConstants.BRAND_NOT_FOUND_NAME, name)
+        )));
     }
 
     @Override

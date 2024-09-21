@@ -1,7 +1,9 @@
 package com.emazon.stock.adapters.driving.rest.controller;
 
+import com.emazon.stock.adapters.driving.rest.dto.request.PageQuery;
 import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
 import com.emazon.stock.adapters.driving.rest.dto.request.ProductRequest;
+import com.emazon.stock.adapters.driving.rest.dto.request.filter.ProductFilterRequest;
 import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ProductCategoryResponse;
 import com.emazon.stock.adapters.driving.rest.dto.response.ProductResponse;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +23,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/products")
@@ -47,13 +49,16 @@ public class ProductController {
 
     @Operation(summary = RestConstants.SWAGGER_GET_ALL_PRODUCTS_SUMMARY)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = RestConstants.CODE_OK, description = RestConstants.SWAGGER_GET_ALL_PRODUCTS_RESPONSE, content = @Content(mediaType = RestConstants.SWAGGER_JSON, schema =  @Schema(implementation = PageResponse.class))),
+            @ApiResponse(responseCode = RestConstants.CODE_OK, description = RestConstants.SWAGGER_GET_ALL_PRODUCTS_RESPONSE, useReturnTypeSchema = true),
     })
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'WAREHOUSE_ASSISTANT', 'CUSTOMER')")
-    public ResponseEntity<PageResponse<ProductResponse>> getAllProducts(@RequestParam Map<String, String> query) {
+    public ResponseEntity<PageResponse<ProductResponse>> getAllProducts(
+            @Nullable ProductFilterRequest filterRequest,
+            @Nullable PageQuery query
+    ) {
         PaginationRequest paginationRequest = new PaginationRequest(query);
-        return ResponseEntity.ok(productService.getAllProducts(paginationRequest));
+        return ResponseEntity.ok(productService.getAllProducts(filterRequest, paginationRequest));
     }
 
 
