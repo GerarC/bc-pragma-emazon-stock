@@ -57,7 +57,7 @@ class BrandControllerTest {
     void createBrandIsOK() throws Exception {
         BrandRequest brandMock = BrandRequest.builder().name("nothing").description("Nothing is a brand associated with nothing").build();
 
-        this.mockMvc.perform(post("/brands")
+        this.mockMvc.perform(post("/v1/brands")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(brandMock)))
                 .andExpect(status().isCreated());
@@ -69,7 +69,7 @@ class BrandControllerTest {
         BrandRequest brandMock = BrandRequest.builder().name("nothing").description("brand with a name with more than 50 chars").build();
 
         doThrow(new EntityAlreadyExistsException("entity", "nothing")).when(brandService).save(brandMock);
-        this.mockMvc.perform(post("/brands")
+        this.mockMvc.perform(post("/v1/brands")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(brandMock)))
                 .andExpect(status().isConflict());
@@ -80,7 +80,7 @@ class BrandControllerTest {
         BrandRequest brandMock = BrandRequest.builder().name("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").description("brand with a name with more than 50 chars").build();
 
         doThrow(new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.NAME.toString(), String.valueOf(DomainConstants.NAME_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}))).when(brandService).save(brandMock);
-        this.mockMvc.perform(post("/brands")
+        this.mockMvc.perform(post("/v1/brands")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(brandMock)))
                 .andExpect(status().isBadRequest());
@@ -91,7 +91,7 @@ class BrandControllerTest {
         BrandRequest brandMock = BrandRequest.builder().name("long description").description("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee").build();
 
         doThrow(new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.DESCRIPTION.toString(), String.valueOf(DomainConstants.CATEGORY_DESCRIPTION_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}))).when(brandService).save(brandMock);
-        this.mockMvc.perform(post("/brands")
+        this.mockMvc.perform(post("/v1/brands")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(brandMock)))
                 .andExpect(status().isBadRequest());
@@ -102,7 +102,7 @@ class BrandControllerTest {
         BrandRequest brandMock = BrandRequest.builder().name("").description("Nothing is a brand associated with nothing").build();
 
         doThrow(new EmptyFieldException("NAME")).when(brandService).save(brandMock);
-        this.mockMvc.perform(post("/brands")
+        this.mockMvc.perform(post("/v1/brands")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(brandMock)))
                 .andExpect(status().isBadRequest());
@@ -113,7 +113,7 @@ class BrandControllerTest {
         BrandRequest brandMock = BrandRequest.builder().name("nothing").description("").build();
 
         doThrow(new EmptyFieldException("DESCRIPTION")).when(brandService).save(brandMock);
-        this.mockMvc.perform(post("/brands")
+        this.mockMvc.perform(post("/v1/brands")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(brandMock)))
                 .andExpect(status().isBadRequest());
@@ -128,7 +128,7 @@ class BrandControllerTest {
                 new BrandResponse(2L, "something", "second description")
         ));
         when(brandService.getAllBrands(paginationRequest)).thenReturn(mockDTOs);
-        this.mockMvc.perform(get("/brands"))
+        this.mockMvc.perform(get("/v1/brands"))
                 .andExpect(status().isOk());
     }
 
@@ -141,7 +141,7 @@ class BrandControllerTest {
                 new BrandResponse(2L, "something", "second description")
         ));
         when(brandService.getAllBrands(paginationRequest)).thenReturn(mockDTOs);
-        this.mockMvc.perform(get("/brands")
+        this.mockMvc.perform(get("/v1/brands")
                         .queryParam("page", "0")
                         .queryParam("sortBy", "name")
                         .queryParam("asc", "true")

@@ -51,4 +51,6 @@ public class DomainConstants {
 
     public static final String CATEGORY_NOT_FOUND_ID = "Category with id '%s' not found";
     public static final String CATEGORY_NOT_FOUND_NAME = "Category with name '%s' not found";
+
+    public static final String NOT_ENOUGH_STOCK_QUANTITY_MESSAGE = "Product %s has not enough stock quantity";
 }

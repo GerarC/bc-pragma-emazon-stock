@@ -58,7 +58,7 @@ class ProductControllerTest {
         ProductBrandRequest productBrandRequest = new ProductBrandRequest(1L);
         ProductRequest productRequest = new ProductRequest("name", "description", BigDecimal.ONE, 1L, List.of(productCategoryRequest), productBrandRequest);
 
-        this.mockMvc.perform(post("/products")
+        this.mockMvc.perform(post("/v1/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(productRequest)))
                 .andExpect(status().isCreated());
@@ -74,7 +74,7 @@ class ProductControllerTest {
                 new ProductResponse(2L, "burger2", "a burger", BigDecimal.valueOf(0), 1L, Collections.singletonList("fast-food"), "burger-kink")
         ));
         when(productService.getAllProducts(null, paginationRequest)).thenReturn(mockDTOs);
-        this.mockMvc.perform(get("/products"))
+        this.mockMvc.perform(get("/v1/products"))
                 //.andExpect(content().json(JsonParser.toJson(mockDTOs)))
                 .andExpect(status().isOk());
     }
@@ -86,7 +86,7 @@ class ProductControllerTest {
                 new ProductCategoryResponse(2L, "something")
         );
         when(productService.getProductCategories(1L)).thenReturn(categoryResponses);
-        this.mockMvc.perform(get("/products/1/categories"))
+        this.mockMvc.perform(get("/v1/products/1/categories"))
                 .andExpect(content().json(JsonParser.toJson(categoryResponses)))
                 .andExpect(status().isOk());
     }
@@ -96,7 +96,7 @@ class ProductControllerTest {
         Long id = 1L;
         ProductRequest productRequest = new ProductRequest(null, null, null, 1L, null, null);
         doNothing().when(productService).addSupply(id, productRequest);
-        this.mockMvc.perform(put("/products/1/add-supply")
+        this.mockMvc.perform(put("/v1/products/1/add-supply")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(productRequest)))
                 .andExpect(status().isOk());

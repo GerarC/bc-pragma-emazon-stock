@@ -57,7 +57,7 @@ class CategoryControllerTest {
     void createCategoryIsOK() throws Exception {
         CategoryRequest categoryMock = CategoryRequest.builder().name("nothing").description("Nothing is a category associated with nothing").build();
 
-        this.mockMvc.perform(post("/categories")
+        this.mockMvc.perform(post("/v1/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(categoryMock)))
                 .andExpect(status().isCreated());
@@ -69,7 +69,7 @@ class CategoryControllerTest {
         CategoryRequest categoryMock = CategoryRequest.builder().name("nothing").description("Another category with the same name").build();
 
         doThrow(new EntityAlreadyExistsException(Category.class.getSimpleName(), "nothing")).when(categoryService).save(categoryMock);
-        this.mockMvc.perform(post("/categories")
+        this.mockMvc.perform(post("/v1/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(categoryMock)))
                 .andExpect(status().isConflict());
@@ -80,7 +80,7 @@ class CategoryControllerTest {
         CategoryRequest categoryMock = CategoryRequest.builder().name("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").description("category with a name with more than 50 chars").build();
 
         doThrow(new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.NAME.toString(), String.valueOf(DomainConstants.NAME_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}))).when(categoryService).save(categoryMock);
-        this.mockMvc.perform(post("/categories")
+        this.mockMvc.perform(post("/v1/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(categoryMock)))
                 .andExpect(status().isBadRequest());
@@ -91,7 +91,7 @@ class CategoryControllerTest {
         CategoryRequest categoryMock = CategoryRequest.builder().name("long description").description("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee").build();
 
         doThrow(new OutOfBoundsException(String.join(" ", new String[]{DomainConstants.Field.DESCRIPTION.toString(), String.valueOf(DomainConstants.CATEGORY_DESCRIPTION_LENGTH_LIMIT), DomainConstants.CHARS_LIMIT_REACHED_MESSAGE}))).when(categoryService).save(categoryMock);
-        this.mockMvc.perform(post("/categories")
+        this.mockMvc.perform(post("/v1/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(categoryMock)))
                 .andExpect(status().isBadRequest());
@@ -102,7 +102,7 @@ class CategoryControllerTest {
         CategoryRequest categoryMock = CategoryRequest.builder().name("").description("Nothing is a category associated with nothing").build();
 
         doThrow(new EmptyFieldException("NAME")).when(categoryService).save(categoryMock);
-        this.mockMvc.perform(post("/categories")
+        this.mockMvc.perform(post("/v1/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(categoryMock)))
                 .andExpect(status().isBadRequest());
@@ -113,7 +113,7 @@ class CategoryControllerTest {
         CategoryRequest categoryMock = CategoryRequest.builder().name("nothing").description("").build();
 
         doThrow(new EmptyFieldException("DESCRIPTION")).when(categoryService).save(categoryMock);
-        this.mockMvc.perform(post("/categories")
+        this.mockMvc.perform(post("/v1/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonParser.toJson(categoryMock)))
                 .andExpect(status().isBadRequest());
@@ -124,11 +124,11 @@ class CategoryControllerTest {
         CategoryResponse categoryMock = CategoryResponse.builder().id(1L).name("nothing").description("Nothing is a category associated with nothing").build();
         when(categoryService.getCategory(1L)).thenReturn(categoryMock);
         when(categoryService.getCategory(2L)).thenThrow(new EntityNotFoundException("Category with id 4 not found"));
-        this.mockMvc.perform(get("/categories/1"))
+        this.mockMvc.perform(get("/v1/categories/1"))
                 .andExpect(content().json(JsonParser.toJson(categoryMock)))
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(get("/categories/2"))
+        this.mockMvc.perform(get("/v1/categories/2"))
                 .andExpect(status().isNotFound());
 
     }
@@ -142,7 +142,7 @@ class CategoryControllerTest {
                 new CategoryResponse(2L, "something", "second description")
         ));
         when(categoryService.getAllCategories(paginationRequest)).thenReturn(mockDTOs);
-        this.mockMvc.perform(get("/categories"))
+        this.mockMvc.perform(get("/v1/categories"))
                 .andExpect(status().isOk());
     }
 
@@ -155,7 +155,7 @@ class CategoryControllerTest {
                 new CategoryResponse(2L, "something", "second description")
         ));
         when(categoryService.getAllCategories(paginationRequest)).thenReturn(mockDTOs);
-        this.mockMvc.perform(get("/categories")
+        this.mockMvc.perform(get("/v1/categories")
                         .queryParam("page", "0")
                         .queryParam("sortBy", "name")
                         .queryParam("pageSize", "10")

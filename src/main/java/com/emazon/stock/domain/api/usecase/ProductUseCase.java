@@ -1,10 +1,7 @@
 package com.emazon.stock.domain.api.usecase;
 
 import com.emazon.stock.domain.api.ProductServicePort;
-import com.emazon.stock.domain.exceptions.DuplicatedProductCategoryException;
-import com.emazon.stock.domain.exceptions.EmptyFieldException;
-import com.emazon.stock.domain.exceptions.NotEnoughCategoriesException;
-import com.emazon.stock.domain.exceptions.OutOfBoundsException;
+import com.emazon.stock.domain.exceptions.*;
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.model.Product;
 import com.emazon.stock.domain.spi.BrandPersistencePort;
@@ -39,7 +36,7 @@ public class ProductUseCase implements ProductServicePort {
         validateDescription(product.getDescription(), DomainConstants.BRAND_DESCRIPTION_LENGTH_LIMIT);
         validatePrice(product.getPrice());
         validateQuantity(product.getQuantity());
-        if(product.getBrand() == null) throw new EmptyFieldException(DomainConstants.Field.BRAND.toString());
+        if (product.getBrand() == null) throw new EmptyFieldException(DomainConstants.Field.BRAND.toString());
         brandPersistencePort.getBrand(product.getBrand().getId());
 
         if (product.getCategories() == null || product.getCategories().isEmpty())
@@ -72,13 +69,19 @@ public class ProductUseCase implements ProductServicePort {
     }
 
     @Override
-    public void addSupply(Long id, Product product){
-        productPersistencePort.addSupply(id, product);
+    public void addSupply(Long id, Product product) {
+        Product originalProduct = productPersistencePort.getProduct(id);
+        originalProduct.setQuantity(product.getQuantity() + originalProduct.getQuantity());
+        productPersistencePort.save(originalProduct);
     }
-    
+
     @Override
-    public void removeSupply(Long id, Product product){
-        productPersistencePort.removeSupply(id, product);
+    public void removeSupply(Long id, Product product) {
+        Product originalProduct = productPersistencePort.getProduct(id);
+        long newQuantity = originalProduct.getQuantity() - product.getQuantity();
+        if (newQuantity < 0) throw new NotEnoughStockException(originalProduct.getName());
+        originalProduct.setQuantity(newQuantity);
+        productPersistencePort.save(originalProduct);
     }
 
     @Override
