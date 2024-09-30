@@ -1,12 +1,13 @@
 package com.emazon.stock.adapters.driving.rest.service.impl;
 
-import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
-import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
-import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
-import com.emazon.stock.adapters.driving.rest.mapper.request.CategoryRequestMapper;
-import com.emazon.stock.adapters.driving.rest.mapper.request.PaginationRequestMapper;
-import com.emazon.stock.adapters.driving.rest.mapper.response.CategoryResponseMapper;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.CategoryRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.PaginationRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.response.CategoryResponse;
+import com.emazon.stock.adapters.driving.rest.v1.dto.response.PageResponse;
+import com.emazon.stock.adapters.driving.rest.v1.mapper.request.CategoryRequestMapper;
+import com.emazon.stock.adapters.driving.rest.v1.mapper.request.PaginationRequestMapper;
+import com.emazon.stock.adapters.driving.rest.v1.mapper.response.CategoryResponseMapper;
+import com.emazon.stock.adapters.driving.rest.v1.service.impl.CategoryServiceImpl;
 import com.emazon.stock.domain.api.CategoryServicePort;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.model.Category;

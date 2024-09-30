@@ -1,17 +1,18 @@
 package com.emazon.stock.adapters.driving.rest.controller;
 
-import com.emazon.stock.adapters.driving.rest.dto.request.CategoryRequest;
-import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
-import com.emazon.stock.adapters.driving.rest.dto.response.CategoryResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
-import com.emazon.stock.adapters.driving.rest.service.CategoryService;
+import com.emazon.stock.adapters.driving.rest.v1.controller.CategoryController;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.CategoryRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.PaginationRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.response.CategoryResponse;
+import com.emazon.stock.adapters.driving.rest.v1.dto.response.PageResponse;
+import com.emazon.stock.adapters.driving.rest.v1.service.CategoryService;
 import com.emazon.stock.domain.exceptions.EntityAlreadyExistsException;
 import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityNotFoundException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.model.Category;
 import com.emazon.stock.domain.utils.DomainConstants;
-import com.emazon.stock.adapters.driving.rest.utils.JsonParser;
+import com.emazon.stock.adapters.driving.rest.v1.utils.JsonParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;

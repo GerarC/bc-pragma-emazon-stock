@@ -22,6 +22,8 @@ logging:
 
 server:
     port: 8091
+    servlet:
+        context-path: ${EMAZON_STOCK_CONTEXT_PATH:/emazon/stock}
 
 allowed-origins:
     http://localhost:3000/,
@@ -29,4 +31,4 @@ allowed-origins:
 
 emazon:
     user:
-        base-url: localhost:8090
+        base-url: localhost:8090/emazon/user

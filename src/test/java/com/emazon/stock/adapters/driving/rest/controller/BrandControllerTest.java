@@ -1,15 +1,16 @@
 package com.emazon.stock.adapters.driving.rest.controller;
 
-import com.emazon.stock.adapters.driving.rest.dto.request.BrandRequest;
-import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
-import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
-import com.emazon.stock.adapters.driving.rest.service.BrandService;
+import com.emazon.stock.adapters.driving.rest.v1.controller.BrandController;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.BrandRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.PaginationRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.response.BrandResponse;
+import com.emazon.stock.adapters.driving.rest.v1.dto.response.PageResponse;
+import com.emazon.stock.adapters.driving.rest.v1.service.BrandService;
 import com.emazon.stock.domain.exceptions.EmptyFieldException;
 import com.emazon.stock.domain.exceptions.EntityAlreadyExistsException;
 import com.emazon.stock.domain.exceptions.OutOfBoundsException;
 import com.emazon.stock.domain.utils.DomainConstants;
-import com.emazon.stock.adapters.driving.rest.utils.JsonParser;
+import com.emazon.stock.adapters.driving.rest.v1.utils.JsonParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;

@@ -13,6 +13,7 @@ public interface ProductServicePort {
     DomainPage<Product> getAllProducts(ProductFilter filter, PaginationData paginationData);
     List<Category> getProductCategories(Long id);
     void addSupply(Long id, Product product);
+    void removeSupply(Long id, Product product);
     Product getProduct(Long id);
     List<Product> getProducts(List<Long> ids);
 }

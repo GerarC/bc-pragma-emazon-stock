@@ -75,6 +75,11 @@ public class ProductUseCase implements ProductServicePort {
     public void addSupply(Long id, Product product){
         productPersistencePort.addSupply(id, product);
     }
+    
+    @Override
+    public void removeSupply(Long id, Product product){
+        productPersistencePort.removeSupply(id, product);
+    }
 
     @Override
     public Product getProduct(Long id) {

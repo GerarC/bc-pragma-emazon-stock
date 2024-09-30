@@ -1,14 +1,15 @@
 package com.emazon.stock.adapters.driving.rest.controller;
 
-import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
-import com.emazon.stock.adapters.driving.rest.dto.request.ProductBrandRequest;
-import com.emazon.stock.adapters.driving.rest.dto.request.ProductCategoryRequest;
-import com.emazon.stock.adapters.driving.rest.dto.request.ProductRequest;
-import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.ProductCategoryResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.ProductResponse;
-import com.emazon.stock.adapters.driving.rest.service.ProductService;
-import com.emazon.stock.adapters.driving.rest.utils.JsonParser;
+import com.emazon.stock.adapters.driving.rest.v1.controller.ProductController;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.PaginationRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.ProductBrandRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.ProductCategoryRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.ProductRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.response.PageResponse;
+import com.emazon.stock.adapters.driving.rest.v1.dto.response.ProductCategoryResponse;
+import com.emazon.stock.adapters.driving.rest.v1.dto.response.ProductResponse;
+import com.emazon.stock.adapters.driving.rest.v1.service.ProductService;
+import com.emazon.stock.adapters.driving.rest.v1.utils.JsonParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;

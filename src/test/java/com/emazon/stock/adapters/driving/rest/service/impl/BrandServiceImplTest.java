@@ -1,12 +1,13 @@
 package com.emazon.stock.adapters.driving.rest.service.impl;
 
-import com.emazon.stock.adapters.driving.rest.dto.request.BrandRequest;
-import com.emazon.stock.adapters.driving.rest.dto.request.PaginationRequest;
-import com.emazon.stock.adapters.driving.rest.dto.response.BrandResponse;
-import com.emazon.stock.adapters.driving.rest.dto.response.PageResponse;
-import com.emazon.stock.adapters.driving.rest.mapper.request.BrandRequestMapper;
-import com.emazon.stock.adapters.driving.rest.mapper.request.PaginationRequestMapper;
-import com.emazon.stock.adapters.driving.rest.mapper.response.BrandResponseMapper;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.BrandRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.request.PaginationRequest;
+import com.emazon.stock.adapters.driving.rest.v1.dto.response.BrandResponse;
+import com.emazon.stock.adapters.driving.rest.v1.dto.response.PageResponse;
+import com.emazon.stock.adapters.driving.rest.v1.mapper.request.BrandRequestMapper;
+import com.emazon.stock.adapters.driving.rest.v1.mapper.request.PaginationRequestMapper;
+import com.emazon.stock.adapters.driving.rest.v1.mapper.response.BrandResponseMapper;
+import com.emazon.stock.adapters.driving.rest.v1.service.impl.BrandServiceImpl;
 import com.emazon.stock.domain.api.BrandServicePort;
 import com.emazon.stock.domain.model.Brand;
 import com.emazon.stock.domain.utils.pagination.DomainPage;
